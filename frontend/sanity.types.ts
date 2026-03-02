@@ -333,48 +333,6 @@ export type CbButton = {
   link?: CbLink
 }
 
-export type LegalPage = {
-  _id: string
-  _type: 'legalPage'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title: string
-  slug: 'privacy-policy' | 'terms-and-conditions'
-  content: BlockContent
-  seo?: {
-    metaDescription?: string
-    canonicalUrl?: string
-    noIndex?: boolean
-    ogTitle?: string
-    ogDescription?: string
-    ogImage?: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      alt?: string
-      _type: 'image'
-    }
-  }
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
-}
-
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -432,57 +390,20 @@ export type Settings = {
   cookiePolicyScript?: string
 }
 
-export type Page = {
-  _id: string
-  _type: 'page'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name: string
-  slug: Slug
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-    canonicalUrl?: string
-    noIndex?: boolean
-    ogTitle?: string
-    ogDescription?: string
-    ogImage?: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      alt?: string
-      _type: 'image'
-    }
-  }
-  structuredData?: string
-  pageBuilder?: Array<
-    | ({
-        _key: string
-      } & CbButtons)
-    | ({
-        _key: string
-      } & CbColumns)
-    | ({
-        _key: string
-      } & CbGroup)
-    | ({
-        _key: string
-      } & CbList)
-    | ({
-        _key: string
-      } & CbNavigation)
-    | ({
-        _key: string
-      } & CbCover)
-  >
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
 }
 
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type SanityAssistInstructionTask = {
@@ -622,6 +543,116 @@ export type SanityAssistSchemaTypeField = {
   >
 }
 
+export type TranslationMetadata = {
+  _id: string
+  _type: 'translation.metadata'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  translations?: InternationalizedArrayReference
+  schemaTypes?: Array<string>
+}
+
+export type InternationalizedArrayReference = Array<
+  {
+    _key: string
+  } & InternationalizedArrayReferenceValue
+>
+
+export type LegalPageReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'legalPage'
+}
+
+export type InternationalizedArrayReferenceValue = {
+  _type: 'internationalizedArrayReferenceValue'
+  value?: PageReference | LegalPageReference
+}
+
+export type LegalPage = {
+  _id: string
+  _type: 'legalPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: 'privacy-policy' | 'terms-and-conditions'
+  language: string
+  content: BlockContent
+  structuredData?: string
+  seo?: {
+    metaDescription?: string
+    canonicalUrl?: string
+    noIndex?: boolean
+    ogTitle?: string
+    ogDescription?: string
+    ogImage?: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    }
+  }
+}
+
+export type Page = {
+  _id: string
+  _type: 'page'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  slug: Slug
+  language: string
+  pageBuilder?: Array<
+    | ({
+        _key: string
+      } & CbButtons)
+    | ({
+        _key: string
+      } & CbColumns)
+    | ({
+        _key: string
+      } & CbGroup)
+    | ({
+        _key: string
+      } & CbList)
+    | ({
+        _key: string
+      } & CbNavigation)
+    | ({
+        _key: string
+      } & CbCover)
+  >
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+    canonicalUrl?: string
+    noIndex?: boolean
+    ogTitle?: string
+    ogDescription?: string
+    ogImage?: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    }
+  }
+  structuredData?: string
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
 export type SanityImagePaletteSwatch = {
   _type: 'sanity.imagePaletteSwatch'
   background?: string
@@ -745,12 +776,9 @@ export type AllSanitySchemaTypes =
   | CbColumn
   | CbButtons
   | CbButton
-  | LegalPage
+  | Settings
   | SanityImageCrop
   | SanityImageHotspot
-  | Settings
-  | Page
-  | Slug
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -764,6 +792,13 @@ export type AllSanitySchemaTypes =
   | SanityAssistInstructionFieldRef
   | SanityAssistInstruction
   | SanityAssistSchemaTypeField
+  | TranslationMetadata
+  | InternationalizedArrayReference
+  | LegalPageReference
+  | InternationalizedArrayReferenceValue
+  | LegalPage
+  | Page
+  | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -942,11 +977,12 @@ export type SettingsQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: getPageQuery
-// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    name,    slug,    seo{      ...,      ogImage{        ...,        asset->      }    },    structuredData,    "pageBuilder": pageBuilder[]{      ...,        _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },      _type == "cbGroup" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  }        }      },      _type == "cbColumn" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  }        }      },      _type == "cbCover" => {        ...,        content[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  }        }      },      _type == "cbColumns" => {        ...,        columns[]{          ...,          children[]{            ...,              _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  }          }        }      }    }  }
+// Query: *[    _type == 'page' &&    slug.current == $slug &&    coalesce(language, "en") == $language  ][0]{    _id,    _type,    name,    language,    slug,    seo{      ...,      ogImage{        ...,        asset->      }    },    structuredData,    "pageBuilder": pageBuilder[]{      ...,        _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },      _type == "cbGroup" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  }        }      },      _type == "cbColumn" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  }        }      },      _type == "cbCover" => {        ...,        content[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  }        }      },      _type == "cbColumns" => {        ...,        columns[]{          ...,          children[]{            ...,              _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  }          }        }      }    }  }
 export type GetPageQueryResult = {
   _id: string
   _type: 'page'
   name: string
+  language: string
   slug: Slug
   seo: {
     metaTitle?: string
@@ -1440,15 +1476,17 @@ export type GetPageQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: sitemapData
-// Query: *[    (_type == "page" && defined(slug.current)) ||    (_type == "post" && defined(slug.current)) ||    (_type == "legalPage" && defined(slug))  ] | order(_type asc) {    "slug": select(_type == "legalPage" => slug, slug.current),    _type,    _updatedAt,  }
+// Query: *[    (_type == "page" && defined(slug.current)) ||    (_type == "legalPage" && defined(slug))  ] | order(_type asc) {    "slug": select(_type == "legalPage" => slug, slug.current),    "language": coalesce(language, "en"),    _type,    _updatedAt,  }
 export type SitemapDataResult = Array<
   | {
       slug: 'privacy-policy' | 'terms-and-conditions'
+      language: string
       _type: 'legalPage'
       _updatedAt: string
     }
   | {
       slug: string
+      language: string
       _type: 'page'
       _updatedAt: string
     }
@@ -1456,11 +1494,12 @@ export type SitemapDataResult = Array<
 
 // Source: sanity/lib/queries.ts
 // Variable: legalPageBySlugQuery
-// Query: *[_type == "legalPage" && slug == $slug][0]{    _id,    title,    slug,    content,    seo{      ...,      ogImage{        ...,        asset->      }    }  }
+// Query: *[    _type == "legalPage" &&    slug == $slug &&    coalesce(language, "en") == $language  ][0]{    _id,    title,    slug,    language,    content,    seo{      ...,      ogImage{        ...,        asset->      }    }  }
 export type LegalPageBySlugQueryResult = {
   _id: string
   title: string
   slug: 'privacy-policy' | 'terms-and-conditions'
+  language: string
   content: BlockContent
   seo: {
     metaDescription?: string
@@ -1522,9 +1561,31 @@ export type PostPagesSlugsResult = Array<never>
 
 // Source: sanity/lib/queries.ts
 // Variable: pagesSlugs
-// Query: *[_type == "page" && defined(slug.current)]  {"slug": slug.current}
+// Query: *[    _type == "page" &&    defined(slug.current) &&    slug.current != "home" &&    coalesce(language, "en") == $language  ]  {"slug": slug.current}
 export type PagesSlugsResult = Array<{
   slug: string
+}>
+
+// Source: sanity/lib/queries.ts
+// Variable: localizedPagesSlugs
+// Query: *[    _type == "page" &&    defined(slug.current) &&    slug.current != "home" &&    coalesce(language, "en") != $defaultLanguage  ]{    "slug": slug.current,    "language": coalesce(language, "en")  }
+export type LocalizedPagesSlugsResult = Array<{
+  slug: string
+  language: string
+}>
+
+// Source: sanity/lib/queries.ts
+// Variable: pageLanguagesBySlugQuery
+// Query: *[    _type == "page" &&    slug.current == $slug  ]{    "language": coalesce(language, "en")  }
+export type PageLanguagesBySlugQueryResult = Array<{
+  language: string
+}>
+
+// Source: sanity/lib/queries.ts
+// Variable: legalPageLanguagesBySlugQuery
+// Query: *[    _type == "legalPage" &&    slug == $slug  ]{    "language": coalesce(language, "en")  }
+export type LegalPageLanguagesBySlugQueryResult = Array<{
+  language: string
 }>
 
 // Query TypeMap
@@ -1532,13 +1593,16 @@ import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[_type == "settings"][0]{\n    ...,\n    primaryMenu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    secondaryMenu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    menuGroups[]{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    }\n  }\n': SettingsQueryResult
-    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    },\n    structuredData,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      _type == "cbGroup" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumn" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbCover" => {\n        ...,\n        content[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumns" => {\n        ...,\n        columns[]{\n          ...,\n          children[]{\n            ...,\n            \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n\n          }\n        }\n      }\n    }\n  }\n': GetPageQueryResult
-    '\n  *[\n    (_type == "page" && defined(slug.current)) ||\n    (_type == "post" && defined(slug.current)) ||\n    (_type == "legalPage" && defined(slug))\n  ] | order(_type asc) {\n    "slug": select(_type == "legalPage" => slug, slug.current),\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
-    '\n  *[_type == "legalPage" && slug == $slug][0]{\n    _id,\n    title,\n    slug,\n    content,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    }\n  }\n': LegalPageBySlugQueryResult
+    '\n  *[\n    _type == \'page\' &&\n    slug.current == $slug &&\n    coalesce(language, "en") == $language\n  ][0]{\n    _id,\n    _type,\n    name,\n    language,\n    slug,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    },\n    structuredData,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      _type == "cbGroup" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumn" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbCover" => {\n        ...,\n        content[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumns" => {\n        ...,\n        columns[]{\n          ...,\n          children[]{\n            ...,\n            \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n\n          }\n        }\n      }\n    }\n  }\n': GetPageQueryResult
+    '\n  *[\n    (_type == "page" && defined(slug.current)) ||\n    (_type == "legalPage" && defined(slug))\n  ] | order(_type asc) {\n    "slug": select(_type == "legalPage" => slug, slug.current),\n    "language": coalesce(language, "en"),\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
+    '\n  *[\n    _type == "legalPage" &&\n    slug == $slug &&\n    coalesce(language, "en") == $language\n  ][0]{\n    _id,\n    title,\n    slug,\n    language,\n    content,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    }\n  }\n': LegalPageBySlugQueryResult
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': AllPostsQueryResult
     '\n  *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': MorePostsQueryResult
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    content[]{\n    ...,\n    markDefs[]{\n      ...,\n      \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n    }\n  },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
-    '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
+    '\n  *[\n    _type == "page" &&\n    defined(slug.current) &&\n    slug.current != "home" &&\n    coalesce(language, "en") == $language\n  ]\n  {"slug": slug.current}\n': PagesSlugsResult
+    '\n  *[\n    _type == "page" &&\n    defined(slug.current) &&\n    slug.current != "home" &&\n    coalesce(language, "en") != $defaultLanguage\n  ]{\n    "slug": slug.current,\n    "language": coalesce(language, "en")\n  }\n': LocalizedPagesSlugsResult
+    '\n  *[\n    _type == "page" &&\n    slug.current == $slug\n  ]{\n    "language": coalesce(language, "en")\n  }\n': PageLanguagesBySlugQueryResult
+    '\n  *[\n    _type == "legalPage" &&\n    slug == $slug\n  ]{\n    "language": coalesce(language, "en")\n  }\n': LegalPageLanguagesBySlugQueryResult
   }
 }

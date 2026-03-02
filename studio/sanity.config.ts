@@ -16,6 +16,7 @@ import {
   type DocumentLocation,
 } from 'sanity/presentation'
 import {assist} from '@sanity/assist'
+import {documentInternationalization} from '@sanity/document-internationalization'
 
 // Environment variables for project configuration
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'your-projectID'
@@ -32,12 +33,15 @@ const homeLocation = {
 
 // resolveHref() is a convenience function that resolves the URL
 // path for different document types and used in the presentation tool.
-function resolveHref(documentType?: string, slug?: string): string | undefined {
+function resolveHref(documentType?: string, slug?: string, language?: string): string | undefined {
+  const basePath = !language || language === 'en' ? '' : `/${language}`
   switch (documentType) {
     case 'post':
-      return slug ? `/posts/${slug}` : undefined
+      return slug ? `${basePath}/posts/${slug}` : undefined
     case 'page':
-      return slug ? `/${slug}` : undefined
+      return slug ? `${basePath}/${slug}` : undefined
+    case 'legalPage':
+      return slug ? `${basePath}/${slug}` : undefined
     default:
       console.warn('Invalid document type:', documentType)
       return undefined
@@ -70,7 +74,29 @@ export default defineConfig({
           },
           {
             route: '/:slug',
-            filter: `_type == "page" && slug.current == $slug || _id == $slug`,
+            filter: `_type == "page" && (slug.current == $slug || _id == $slug) && coalesce(language, "en") == "en"`,
+          },
+          {
+            route: '/:language/:slug',
+            filter:
+              `_type == "page" && (slug.current == $slug || _id == $slug) && coalesce(language, "en") == $language`,
+          },
+          {
+            route: '/privacy-policy',
+            filter: `_type == "legalPage" && slug == "privacy-policy" && coalesce(language, "en") == "en"`,
+          },
+          {
+            route: '/terms-and-conditions',
+            filter: `_type == "legalPage" && slug == "terms-and-conditions" && coalesce(language, "en") == "en"`,
+          },
+          {
+            route: '/:language/privacy-policy',
+            filter: `_type == "legalPage" && slug == "privacy-policy" && coalesce(language, "en") == $language`,
+          },
+          {
+            route: '/:language/terms-and-conditions',
+            filter:
+              `_type == "legalPage" && slug == "terms-and-conditions" && coalesce(language, "en") == $language`,
           },
           {
             route: '/posts/:slug',
@@ -88,12 +114,28 @@ export default defineConfig({
             select: {
               name: 'name',
               slug: 'slug.current',
+              language: 'language',
             },
             resolve: (doc) => ({
               locations: [
                 {
                   title: doc?.name || 'Untitled',
-                  href: resolveHref('page', doc?.slug)!,
+                  href: resolveHref('page', doc?.slug, doc?.language)!,
+                },
+              ],
+            }),
+          }),
+          legalPage: defineLocations({
+            select: {
+              title: 'title',
+              slug: 'slug',
+              language: 'language',
+            },
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: doc?.title || 'Untitled',
+                  href: resolveHref('legalPage', doc?.slug, doc?.language)!,
                 },
               ],
             }),
@@ -119,6 +161,16 @@ export default defineConfig({
         },
       },
     }),
+    documentInternationalization({
+      supportedLanguages: [
+        {id: 'en', title: 'English'},
+        {id: 'es', title: 'Spanish'},
+      ],
+      schemaTypes: ['page', 'legalPage'],
+      languageField: 'language',
+      weakReferences: true,
+      bulkPublish: true,
+    }),
     structureTool({
       structure, // Custom studio structure configuration, imported from ./src/structure.ts
     }),
@@ -127,6 +179,11 @@ export default defineConfig({
     assist(),
     visionTool(),
   ],
+  document: {
+    // Hide base templates so editors use the language-aware creation options from i18n.
+    newDocumentOptions: (prev) =>
+      prev.filter((templateItem) => !['page', 'legalPage'].includes(templateItem.templateId)),
+  },
 
   // Schema configuration, imported from ./src/schemaTypes/index.ts
   schema: {

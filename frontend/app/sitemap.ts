@@ -42,21 +42,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let url: string = domain
 
     for (const p of allPostsAndPages) {
+      const languagePrefix = p.language && p.language !== 'en' ? `/${p.language}` : ''
       switch (p._type) {
         case 'page':
           priority = 0.8
           changeFrequency = 'monthly'
-          url = `${domain}/${p.slug}`
-          break
-        case 'post':
-          priority = 0.5
-          changeFrequency = 'never'
-          url = `${domain}/posts/${p.slug}`
+          url = p.slug === 'home' ? `${domain}${languagePrefix}` : `${domain}${languagePrefix}/${p.slug}`
           break
         case 'legalPage':
           priority = 0.3
           changeFrequency = 'yearly'
-          url = `${domain}/${p.slug}`
+          url = `${domain}${languagePrefix}/${p.slug}`
           break
       }
       sitemap.push({

@@ -333,48 +333,6 @@ export type CbButton = {
   link?: CbLink
 }
 
-export type LegalPage = {
-  _id: string
-  _type: 'legalPage'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title: string
-  slug: 'privacy-policy' | 'terms-and-conditions'
-  content: BlockContent
-  seo?: {
-    metaDescription?: string
-    canonicalUrl?: string
-    noIndex?: boolean
-    ogTitle?: string
-    ogDescription?: string
-    ogImage?: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      alt?: string
-      _type: 'image'
-    }
-  }
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
-}
-
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -432,57 +390,20 @@ export type Settings = {
   cookiePolicyScript?: string
 }
 
-export type Page = {
-  _id: string
-  _type: 'page'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  name: string
-  slug: Slug
-  seo?: {
-    metaTitle?: string
-    metaDescription?: string
-    canonicalUrl?: string
-    noIndex?: boolean
-    ogTitle?: string
-    ogDescription?: string
-    ogImage?: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      alt?: string
-      _type: 'image'
-    }
-  }
-  structuredData?: string
-  pageBuilder?: Array<
-    | ({
-        _key: string
-      } & CbButtons)
-    | ({
-        _key: string
-      } & CbColumns)
-    | ({
-        _key: string
-      } & CbGroup)
-    | ({
-        _key: string
-      } & CbList)
-    | ({
-        _key: string
-      } & CbNavigation)
-    | ({
-        _key: string
-      } & CbCover)
-  >
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
 }
 
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type SanityAssistInstructionTask = {
@@ -622,6 +543,116 @@ export type SanityAssistSchemaTypeField = {
   >
 }
 
+export type TranslationMetadata = {
+  _id: string
+  _type: 'translation.metadata'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  translations?: InternationalizedArrayReference
+  schemaTypes?: Array<string>
+}
+
+export type InternationalizedArrayReference = Array<
+  {
+    _key: string
+  } & InternationalizedArrayReferenceValue
+>
+
+export type LegalPageReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'legalPage'
+}
+
+export type InternationalizedArrayReferenceValue = {
+  _type: 'internationalizedArrayReferenceValue'
+  value?: PageReference | LegalPageReference
+}
+
+export type LegalPage = {
+  _id: string
+  _type: 'legalPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: 'privacy-policy' | 'terms-and-conditions'
+  language: string
+  content: BlockContent
+  structuredData?: string
+  seo?: {
+    metaDescription?: string
+    canonicalUrl?: string
+    noIndex?: boolean
+    ogTitle?: string
+    ogDescription?: string
+    ogImage?: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    }
+  }
+}
+
+export type Page = {
+  _id: string
+  _type: 'page'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  slug: Slug
+  language: string
+  pageBuilder?: Array<
+    | ({
+        _key: string
+      } & CbButtons)
+    | ({
+        _key: string
+      } & CbColumns)
+    | ({
+        _key: string
+      } & CbGroup)
+    | ({
+        _key: string
+      } & CbList)
+    | ({
+        _key: string
+      } & CbNavigation)
+    | ({
+        _key: string
+      } & CbCover)
+  >
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+    canonicalUrl?: string
+    noIndex?: boolean
+    ogTitle?: string
+    ogDescription?: string
+    ogImage?: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      alt?: string
+      _type: 'image'
+    }
+  }
+  structuredData?: string
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
 export type SanityImagePaletteSwatch = {
   _type: 'sanity.imagePaletteSwatch'
   background?: string
@@ -745,12 +776,9 @@ export type AllSanitySchemaTypes =
   | CbColumn
   | CbButtons
   | CbButton
-  | LegalPage
+  | Settings
   | SanityImageCrop
   | SanityImageHotspot
-  | Settings
-  | Page
-  | Slug
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -764,6 +792,13 @@ export type AllSanitySchemaTypes =
   | SanityAssistInstructionFieldRef
   | SanityAssistInstruction
   | SanityAssistSchemaTypeField
+  | TranslationMetadata
+  | InternationalizedArrayReference
+  | LegalPageReference
+  | InternationalizedArrayReferenceValue
+  | LegalPage
+  | Page
+  | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions

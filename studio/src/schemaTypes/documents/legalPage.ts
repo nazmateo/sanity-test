@@ -6,11 +6,17 @@ export const legalPage = defineType({
   title: 'Legal Page',
   type: 'document',
   icon: DocumentTextIcon,
+  groups: [
+    {name: 'general', title: 'General', default: true},
+    {name: 'content', title: 'Content'},
+    {name: 'seo', title: 'SEO'},
+  ],
   fields: [
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
+      group: 'general',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -18,6 +24,11 @@ export const legalPage = defineType({
       title: 'Slug',
       description: 'Reserved legal slugs.',
       type: 'string',
+      group: 'general',
+      readOnly: ({document}) => {
+        const language = (document as {language?: string} | undefined)?.language || 'en'
+        return language !== 'en'
+      },
       options: {
         list: [
           {title: 'Privacy Policy', value: 'privacy-policy'},
@@ -27,15 +38,45 @@ export const legalPage = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      readOnly: true,
+      hidden: true,
+      initialValue: 'en',
+      group: 'general',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'blockContent',
+      group: 'content',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'structuredData',
+      title: 'Structured data (application/ld+json)',
+      description: 'Paste JSON only (without <script> tags).',
+      type: 'text',
+      rows: 8,
+      group: 'seo',
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          if (!value) return true
+          try {
+            JSON.parse(value)
+            return true
+          } catch {
+            return 'Structured data must be valid JSON.'
+          }
+        }),
     }),
     defineField({
       name: 'seo',
       title: 'SEO',
       type: 'object',
+      group: 'seo',
       fields: [
         defineField({
           name: 'metaDescription',

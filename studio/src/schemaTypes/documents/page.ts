@@ -12,12 +12,17 @@ export const page = defineType({
   title: 'Page',
   type: 'document',
   icon: DocumentIcon,
-  fieldsets: [{name: 'seo', title: 'SEO'}],
+  groups: [
+    {name: 'general', title: 'General', default: true},
+    {name: 'content', title: 'Content'},
+    {name: 'seo', title: 'SEO'},
+  ],
   fields: [
     defineField({
       name: 'name',
       title: 'Name',
       type: 'string',
+      group: 'general',
       validation: (Rule) => Rule.required(),
     }),
 
@@ -25,17 +30,74 @@ export const page = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
+      group: 'general',
+      description: 'Editable on default language only. Translations inherit the same slug.',
+      readOnly: ({document}) => {
+        const language = (document as {language?: string} | undefined)?.language || 'en'
+        return language !== 'en'
+      },
       validation: (Rule) => Rule.required(),
       options: {
         source: 'name',
         maxLength: 96,
+        isUnique: async (slug, context) => {
+          const document = context.document as {_id?: string; language?: string}
+          const client = context.getClient({apiVersion: '2025-09-25'})
+          const id = document?._id?.replace(/^drafts\./, '')
+          const params = {
+            draft: `drafts.${id}`,
+            published: id,
+            slug,
+            language: document?.language || 'en',
+          }
+
+          const query = `
+            !defined(*[
+              !(_id in [$draft, $published]) &&
+              _type == "page" &&
+              slug.current == $slug &&
+              coalesce(language, "en") == $language
+            ][0]._id)
+          `
+
+          return client.fetch(query, params)
+        },
+      },
+    }),
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      readOnly: true,
+      hidden: true,
+      initialValue: 'en',
+      group: 'general',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'pageBuilder',
+      title: 'Page builder',
+      type: 'array',
+      group: 'content',
+      of: pageBuilderContainerBlockTypes,
+      options: {
+        insertMenu: {
+          // Configure the "Add Item" menu to display a thumbnail preview of the content type. https://www.sanity.io/docs/studio/array-type#efb1fe03459d
+          views: [
+            {
+              name: 'grid',
+              previewImageUrl: (schemaTypeName) =>
+                `/static/page-builder-thumbnails/${schemaTypeName}.webp`,
+            },
+          ],
+        },
       },
     }),
     defineField({
       name: 'seo',
       title: 'SEO',
       type: 'object',
-      fieldset: 'seo',
+      group: 'seo',
       fields: [
         defineField({
           name: 'metaTitle',
@@ -96,6 +158,7 @@ export const page = defineType({
       description: 'Paste JSON only (without <script> tags).',
       type: 'text',
       rows: 8,
+      group: 'seo',
       validation: (Rule) =>
         Rule.custom((value) => {
           if (!value) return true
@@ -106,24 +169,6 @@ export const page = defineType({
             return 'Structured data must be valid JSON.'
           }
         }),
-    }),
-    defineField({
-      name: 'pageBuilder',
-      title: 'Page builder',
-      type: 'array',
-      of: pageBuilderContainerBlockTypes,
-      options: {
-        insertMenu: {
-          // Configure the "Add Item" menu to display a thumbnail preview of the content type. https://www.sanity.io/docs/studio/array-type#efb1fe03459d
-          views: [
-            {
-              name: 'grid',
-              previewImageUrl: (schemaTypeName) =>
-                `/static/page-builder-thumbnails/${schemaTypeName}.webp`,
-            },
-          ],
-        },
-      },
     }),
   ],
 })

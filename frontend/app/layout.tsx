@@ -17,6 +17,7 @@ import {sanityFetch, SanityLive} from '@/sanity/lib/live'
 import {settingsQuery} from '@/sanity/lib/queries'
 import {normalizeInlineScript, resolveOpenGraphImage} from '@/sanity/lib/utils'
 import {handleError} from '@/app/client-utils'
+import {buildLanguageAlternates, SUPPORTED_LANGUAGES} from '@/sanity/lib/i18n'
 
 /**
  * Generate metadata for the page.
@@ -42,6 +43,15 @@ export async function generateMetadata(): Promise<Metadata> {
   }
   return {
     metadataBase,
+    alternates: metadataBase
+      ? {
+          canonical: metadataBase.toString().replace(/\/$/, ''),
+          languages: {
+            ...buildLanguageAlternates(metadataBase.toString(), '/', [...SUPPORTED_LANGUAGES]),
+            'x-default': metadataBase.toString().replace(/\/$/, ''),
+          },
+        }
+      : undefined,
     title: {
       template: `%s | ${title}`,
       default: title,

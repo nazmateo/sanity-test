@@ -94,10 +94,15 @@ const cbNavigationWithLinksProjection = /* groq */ `
 `
 
 export const getPageQuery = defineQuery(`
-  *[_type == 'page' && slug.current == $slug][0]{
+  *[
+    _type == 'page' &&
+    slug.current == $slug &&
+    coalesce(language, "en") == $language
+  ][0]{
     _id,
     _type,
     name,
+    language,
     slug,
     seo{
       ...,
@@ -158,20 +163,25 @@ export const getPageQuery = defineQuery(`
 export const sitemapData = defineQuery(`
   *[
     (_type == "page" && defined(slug.current)) ||
-    (_type == "post" && defined(slug.current)) ||
     (_type == "legalPage" && defined(slug))
   ] | order(_type asc) {
     "slug": select(_type == "legalPage" => slug, slug.current),
+    "language": coalesce(language, "en"),
     _type,
     _updatedAt,
   }
 `)
 
 export const legalPageBySlugQuery = defineQuery(`
-  *[_type == "legalPage" && slug == $slug][0]{
+  *[
+    _type == "legalPage" &&
+    slug == $slug &&
+    coalesce(language, "en") == $language
+  ][0]{
     _id,
     title,
     slug,
+    language,
     content,
     seo{
       ...,
@@ -214,6 +224,41 @@ export const postPagesSlugs = defineQuery(`
 `)
 
 export const pagesSlugs = defineQuery(`
-  *[_type == "page" && defined(slug.current)]
+  *[
+    _type == "page" &&
+    defined(slug.current) &&
+    slug.current != "home" &&
+    coalesce(language, "en") == $language
+  ]
   {"slug": slug.current}
+`)
+
+export const localizedPagesSlugs = defineQuery(`
+  *[
+    _type == "page" &&
+    defined(slug.current) &&
+    slug.current != "home" &&
+    coalesce(language, "en") != $defaultLanguage
+  ]{
+    "slug": slug.current,
+    "language": coalesce(language, "en")
+  }
+`)
+
+export const pageLanguagesBySlugQuery = defineQuery(`
+  *[
+    _type == "page" &&
+    slug.current == $slug
+  ]{
+    "language": coalesce(language, "en")
+  }
+`)
+
+export const legalPageLanguagesBySlugQuery = defineQuery(`
+  *[
+    _type == "legalPage" &&
+    slug == $slug
+  ]{
+    "language": coalesce(language, "en")
+  }
 `)
