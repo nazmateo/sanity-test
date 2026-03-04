@@ -123,6 +123,16 @@ export default defineConfig({
             message: 'This document is used on all pages',
             tone: 'positive',
           }),
+          header: defineLocations({
+            locations: [homeLocation],
+            message: 'This document is used on all pages',
+            tone: 'positive',
+          }),
+          footer: defineLocations({
+            locations: [homeLocation],
+            message: 'This document is used on all pages',
+            tone: 'positive',
+          }),
           page: defineLocations({
             select: {
               name: 'name',
@@ -177,7 +187,12 @@ export default defineConfig({
   document: {
     // Hide base templates so editors use the language-aware creation options from i18n.
     newDocumentOptions: (prev) =>
-      prev.filter((templateItem) => !['page', 'legalPage', 'homePage'].includes(templateItem.templateId)),
+      prev.filter(
+        (templateItem) =>
+          !['page', 'legalPage', 'homePage', 'settings', 'header', 'footer'].includes(
+            templateItem.templateId,
+          ),
+      ),
   },
 
   // Schema configuration, imported from ./src/schemaTypes/index.ts

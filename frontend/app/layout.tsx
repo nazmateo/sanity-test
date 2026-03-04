@@ -2,7 +2,7 @@ import './globals.css'
 
 import {SpeedInsights} from '@vercel/speed-insights/next'
 import type {Metadata} from 'next'
-import {Inter, IBM_Plex_Mono, Noto_Sans_Arabic} from 'next/font/google'
+import {Inter, IBM_Plex_Mono, Noto_Sans_Arabic, SUSE} from 'next/font/google'
 import {draftMode} from 'next/headers'
 import Script from 'next/script'
 import {toPlainText} from 'next-sanity'
@@ -15,7 +15,7 @@ import Header, {type LayoutSettings} from '@/app/components/Header'
 import LocaleDocumentController from '@/app/components/LocaleDocumentController'
 import * as demo from '@/sanity/lib/demo'
 import {sanityFetch, SanityLive} from '@/sanity/lib/live'
-import {settingsQuery} from '@/sanity/lib/queries'
+import {footerQuery, headerQuery, settingsQuery} from '@/sanity/lib/queries'
 import {normalizeInlineScript, resolveOpenGraphImage} from '@/sanity/lib/utils'
 import {handleError} from '@/app/client-utils'
 import {buildLanguageAlternates, SUPPORTED_LANGUAGES} from '@/sanity/lib/i18n'
@@ -95,30 +95,61 @@ const notoSansArabic = Noto_Sans_Arabic({
   display: 'swap',
 })
 
+const suse = SUSE({
+  variable: '--font-suse',
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 export default async function RootLayout({children}: {children: React.ReactNode}) {
-  const [{isEnabled: isDraftMode}, {data: settings}] = await Promise.all([
+  const [{isEnabled: isDraftMode}, {data: settings}, {data: header}, {data: footer}] = await Promise.all([
     draftMode(),
     sanityFetch({
       query: settingsQuery,
     }),
+    sanityFetch({
+      query: headerQuery,
+    }),
+    sanityFetch({
+      query: footerQuery,
+    }),
   ])
 
-  const layoutSettings = settings as (LayoutSettings & {
+  const settingsDoc = settings as
+    | {
+        title?: string | null
+        logo?: {asset?: {_ref?: string} | null; alt?: string | null} | null
+        gtmScript?: string | null
+        gaScript?: string | null
+        cookiePolicyScript?: string | null
+      }
+    | null
+  const headerDoc = header as LayoutSettings['header'] | null
+  const footerDoc = footer as LayoutSettings['footer'] | null
+
+  const layoutSettings: LayoutSettings & {
     gtmScript?: string | null
     gaScript?: string | null
     cookiePolicyScript?: string | null
-  }) | null
+  } = {
+    ...(settingsDoc || {}),
+    header: headerDoc || undefined,
+    footer: footerDoc || undefined,
+    primaryMenu: (headerDoc as {primaryMenu?: LayoutSettings['primaryMenu']} | null)?.primaryMenu,
+    secondaryMenu: (headerDoc as {secondaryMenu?: LayoutSettings['secondaryMenu']} | null)?.secondaryMenu,
+    menuGroups: (footerDoc as {menuGroups?: LayoutSettings['menuGroups']} | null)?.menuGroups,
+  }
   const lang = 'en-US'
   const gtmScript = normalizeInlineScript(layoutSettings?.gtmScript)
   const gaScript = normalizeInlineScript(layoutSettings?.gaScript)
   const cookiePolicyScript = normalizeInlineScript(layoutSettings?.cookiePolicyScript)
 
   return (
-    <html
-      lang={lang}
-      dir="ltr"
-      className={`${inter.variable} ${ibmPlexMono.variable} ${notoSansArabic.variable} bg-white text-black`}
-    >
+      <html
+        lang={lang}
+        dir="ltr"
+        className={`${inter.variable} ${ibmPlexMono.variable} ${notoSansArabic.variable} ${suse.variable} bg-white text-black`}
+      >
       <body>
         <LocaleDocumentController />
         {gtmScript ? <Script id="settings-gtm-script" strategy="afterInteractive">{gtmScript}</Script> : null}

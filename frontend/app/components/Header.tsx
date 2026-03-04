@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import Image from '@/app/components/SanityImage'
 import {isExternalContentLink, resolveContentLinkHref} from '@/sanity/lib/utils'
 
 type MenuLink = {
@@ -33,15 +32,25 @@ export type LayoutSettings = {
     alt?: string | null
   } | null
   header?: {
+    _type?: string
     primaryMenu?: MenuGroup | null
     secondaryMenu?: MenuGroup | null
+    languageToggleLabel?: string | null
+    languageTogglePath?: string | null
     ctaLabel?: string | null
     ctaLink?: ContentLink | null
   } | null
   footer?: {
+    _type?: string
     heading?: string | null
+    officeHeading?: string | null
+    officeAddressOne?: string | null
+    officeAddressTwo?: string | null
+    phone?: string | null
+    email?: string | null
     menu?: MenuGroup | null
     legalMenu?: MenuGroup | null
+    menuGroups?: MenuGroup[] | null
     showDefaultLegalLinks?: boolean | null
     copyrightText?: string | null
   } | null
@@ -50,134 +59,89 @@ export type LayoutSettings = {
   menuGroups?: MenuGroup[] | null
 }
 
-function MenuLinks({items}: {items?: MenuLink[] | null}) {
-  if (!items?.length) {
+function MenuItem({item}: {item: MenuLink}) {
+  const href = resolveContentLinkHref(item.link)
+  if (!href) {
     return null
   }
 
-  return items.map((item, index) => {
-    const href = resolveContentLinkHref(item.link)
-    if (!href) {
-      return null
-    }
+  const isExternal = isExternalContentLink(item.link) && item.link?.openInNewTab
+  const hasSubLinks = Boolean(item.subLinks?.length)
 
-    const hasSubLinks = Boolean(item.subLinks?.length)
-    const key = item.itemId || item._key || `${item.label || 'nav-item'}-${index}`
-    const isExternal = isExternalContentLink(item.link) && item.link?.openInNewTab
+  return (
+    <Link
+      href={href}
+      data-menu-item-id={item.itemId || undefined}
+      className="inline-flex items-center gap-1 px-2 py-2 transition-colors hover:text-[var(--color-albatha-blue)]"
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
+    >
+      <span>{item.label || 'Link'}</span>
+      {hasSubLinks ? <span aria-hidden className="text-xs">v</span> : null}
+    </Link>
+  )
+}
 
-    return (
-      <li
-        key={key}
-        data-menu-item-id={item.itemId || undefined}
-        className={hasSubLinks ? 'relative group' : undefined}
-      >
-        <Link
-          href={href}
-          className="hover:underline"
-          target={isExternal ? '_blank' : undefined}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
-        >
-          {item.label || 'Link'}
-        </Link>
-        {hasSubLinks ? (
-          <ul className="absolute left-0 mt-2 hidden min-w-48 rounded-md border border-gray-100 bg-white p-2 shadow-md group-hover:block">
-            {item.subLinks?.map((subLink, subIndex) => {
-              const subHref = resolveContentLinkHref(subLink.link)
-              if (!subHref) {
-                return null
-              }
-              const subIsExternal =
-                isExternalContentLink(subLink.link) && subLink.link?.openInNewTab
-              return (
-                <li
-                  key={subLink.itemId || subLink._key || `${key}-sub-${subIndex}`}
-                  data-menu-item-id={subLink.itemId || undefined}
-                >
-                  <Link
-                    href={subHref}
-                    className="block rounded px-2 py-1 text-sm hover:bg-gray-50"
-                    target={subIsExternal ? '_blank' : undefined}
-                    rel={subIsExternal ? 'noopener noreferrer' : undefined}
-                  >
-                    {subLink.label || 'Sub link'}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        ) : null}
-      </li>
-    )
-  })
+function Wordmark({title}: {title?: string | null}) {
+  return (
+    <Link href="/" className="inline-flex items-center gap-3 text-white">
+      <span className="inline-flex size-10 rounded-full border-2 border-white/90" aria-hidden />
+      <span className="font-suse text-[52px] leading-none tracking-tight">{title || 'albatha'}</span>
+    </Link>
+  )
 }
 
 export default function Header({settings}: {settings?: LayoutSettings | null}) {
-  const logoAssetRef = settings?.logo?.asset?._ref
   const headerConfig = settings?.header
-  const secondaryMenu = headerConfig?.secondaryMenu || settings?.secondaryMenu
   const primaryMenu = headerConfig?.primaryMenu || settings?.primaryMenu
-  const secondaryLinks = secondaryMenu?.links || []
-  const primaryLinks = primaryMenu?.links || []
-  const ctaHref =
-    resolveContentLinkHref(headerConfig?.ctaLink || null) ||
-    'https://github.com/sanity-io/sanity-template-nextjs-clean'
-  const ctaLabel = headerConfig?.ctaLabel || 'CreatedbyBlack'
-  const isCtaExternal =
-    isExternalContentLink(headerConfig?.ctaLink || null) && headerConfig?.ctaLink?.openInNewTab
+  const secondaryMenu = headerConfig?.secondaryMenu || settings?.secondaryMenu
+  const leftLinks = (primaryMenu?.links || []).slice(0, 3)
+  const rightLinks = secondaryMenu?.links || []
+  const languageTogglePath = headerConfig?.languageTogglePath || '/ae'
+  const languageToggleLabel = headerConfig?.languageToggleLabel || 'AR'
 
   return (
-    <header className="fixed z-50 inset-x-0 top-0 bg-white/90 backdrop-blur-lg border-b border-gray-100">
-      <div className="container px-2 sm:px-6">
-        <div className="flex items-center justify-end gap-5 py-2 border-b border-gray-100 text-xs font-mono text-gray-600">
-          <nav
-            aria-label="Secondary navigation"
-            data-menu-group-id={secondaryMenu?.menuId || 'secondary'}
-          >
-            <ul role="list" className="flex items-center gap-4 md:gap-6 leading-5 tracking-tight">
-              <MenuLinks items={secondaryLinks} />
-            </ul>
-          </nav>
-        </div>
-        <div className="flex items-center justify-between gap-5 py-4">
-          <Link className="flex items-center gap-2" href="/">
-            {logoAssetRef ? (
-              <Image
-                id={logoAssetRef}
-                alt={settings?.logo?.alt || settings?.title || 'Site logo'}
-                width={160}
-                height={48}
-                className="h-10 w-auto"
-                mode="contain"
-              />
-            ) : (
-              <span className="text-lg sm:text-2xl pl-2 font-semibold">
-                {settings?.title || 'Brand Logo'}
-              </span>
-            )}
-          </Link>
-
+    <header className="fixed inset-x-0 top-0 z-50 text-white">
+      <div className="mx-auto mt-10 w-[min(1600px,calc(100%-2rem))] border-b border-white/40 bg-[var(--color-albatha-black-20)] px-2 backdrop-blur-[2px]">
+        <div className="grid min-h-[74px] grid-cols-[1fr_auto_1fr] items-center gap-4 font-suse text-xl">
           <nav
             aria-label="Primary navigation"
             data-menu-group-id={primaryMenu?.menuId || 'primary'}
+            className="justify-self-start"
           >
-            <ul
-              role="list"
-              className="flex items-center gap-4 md:gap-6 leading-5 text-xs sm:text-base tracking-tight font-mono"
-            >
-              <MenuLinks items={primaryLinks} />
-
-              <li className="sm:before:w-[1px] sm:before:bg-gray-200 before:block flex sm:gap-4 md:gap-6">
-                <Link
-                  className="rounded-full flex gap-4 items-center bg-black hover:bg-blue focus:bg-blue py-2 px-4 justify-center sm:py-3 sm:px-6 text-white transition-colors duration-200"
-                  href={ctaHref}
-                  target={isCtaExternal ? '_blank' : undefined}
-                  rel={isCtaExternal ? 'noopener noreferrer' : undefined}
-                >
-                  <span className="whitespace-nowrap">{ctaLabel}</span>
-                </Link>
-              </li>
+            <ul role="list" className="flex items-center gap-4">
+              {leftLinks.map((item, index) => (
+                <li key={item.itemId || item._key || `${item.label || 'left'}-${index}`}>
+                  <MenuItem item={item} />
+                </li>
+              ))}
             </ul>
           </nav>
+
+          <Wordmark title={settings?.title} />
+
+          <div className="flex items-center justify-self-end gap-6">
+            <nav
+              aria-label="Secondary navigation"
+              data-menu-group-id={secondaryMenu?.menuId || 'secondary'}
+            >
+              <ul role="list" className="flex items-center gap-4">
+                {rightLinks.map((item, index) => (
+                  <li key={item.itemId || item._key || `${item.label || 'right'}-${index}`}>
+                    <MenuItem item={item} />
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <Link
+              href={languageTogglePath}
+              className="inline-flex h-[30px] items-center gap-2 rounded-lg border border-white px-3 text-base uppercase transition-colors hover:bg-white/15"
+              aria-label="Switch to Arabic"
+            >
+              <span aria-hidden>o</span>
+              <span>{languageToggleLabel}</span>
+            </Link>
+          </div>
         </div>
       </div>
     </header>

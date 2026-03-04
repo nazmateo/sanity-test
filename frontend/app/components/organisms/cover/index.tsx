@@ -1,4 +1,5 @@
 import { forwardRef, type HTMLAttributes } from "react";
+import NextImage from "next/image";
 import { cn } from "../../../lib/cn";
 
 export interface CoverMedia {
@@ -48,7 +49,15 @@ export const Cover = forwardRef<HTMLDivElement, CoverProps>(
             className={cn(unstyled ? undefined : "block w-full object-cover", mediaClassName)}
           />
         ) : media?.url ? (
-          <img src={media.url} alt="" aria-hidden className={cn(unstyled ? undefined : "block w-full object-cover", mediaClassName)} />
+          <NextImage
+            src={media.url}
+            alt=""
+            aria-hidden
+            width={1920}
+            height={1080}
+            unoptimized
+            className={cn(unstyled ? undefined : "block w-full object-cover", mediaClassName)}
+          />
         ) : null}
         <div className={cn(unstyled ? undefined : "absolute inset-0 bg-black/30", overlayClassName)} aria-hidden />
         <div className={cn(unstyled ? undefined : "relative p-6", contentClassName)}>{children}</div>

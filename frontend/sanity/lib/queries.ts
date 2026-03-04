@@ -18,39 +18,19 @@ const navigationLinksProjection = /* groq */ `
 export const settingsQuery = defineQuery(`
   *[_type == "settings"][0]{
     ...,
-    header{
+    ogImage{
       ...,
-      ctaLink{
-        ...,
-        "internalPageSlug": internalPage->slug.current
-      },
-      primaryMenu{
-        ...,
-        links[]{
-          ${navigationLinksProjection}
-        }
-      },
-      secondaryMenu{
-        ...,
-        links[]{
-          ${navigationLinksProjection}
-        }
-      }
-    },
-    footer{
+      asset->
+    }
+  }
+`)
+
+export const headerQuery = defineQuery(`
+  *[_type == "header"][0]{
+    ...,
+    ctaLink{
       ...,
-      menu{
-        ...,
-        links[]{
-          ${navigationLinksProjection}
-        }
-      },
-      legalMenu{
-        ...,
-        links[]{
-          ${navigationLinksProjection}
-        }
-      }
+      "internalPageSlug": internalPage->slug.current
     },
     primaryMenu{
       ...,
@@ -59,6 +39,24 @@ export const settingsQuery = defineQuery(`
       }
     },
     secondaryMenu{
+      ...,
+      links[]{
+        ${navigationLinksProjection}
+      }
+    }
+  }
+`)
+
+export const footerQuery = defineQuery(`
+  *[_type == "footer"][0]{
+    ...,
+    menu{
+      ...,
+      links[]{
+        ${navigationLinksProjection}
+      }
+    },
+    legalMenu{
       ...,
       links[]{
         ${navigationLinksProjection}
