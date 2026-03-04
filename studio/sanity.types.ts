@@ -13,6 +13,13 @@
  */
 
 // Source: ../sanity.schema.json
+export type PageReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'page'
+}
+
 export type BlockContentTextOnly = Array<{
   children?: Array<{
     marks?: Array<string>
@@ -20,10 +27,13 @@ export type BlockContentTextOnly = Array<{
     _type: 'span'
     _key: string
   }>
-  style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+  style?: 'normal' | 'h2' | 'h3' | 'blockquote'
   listItem?: 'bullet' | 'number'
   markDefs?: Array<{
+    linkType?: 'href' | 'page'
     href?: string
+    page?: PageReference
+    openInNewTab?: boolean
     _type: 'link'
     _key: string
   }>
@@ -31,13 +41,6 @@ export type BlockContentTextOnly = Array<{
   _type: 'block'
   _key: string
 }>
-
-export type PageReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'page'
-}
 
 export type SanityImageAssetReference = {
   _ref: string
@@ -824,8 +827,8 @@ export type Geopoint = {
 }
 
 export type AllSanitySchemaTypes =
-  | BlockContentTextOnly
   | PageReference
+  | BlockContentTextOnly
   | SanityImageAssetReference
   | BlockContent
   | FooterSettings
