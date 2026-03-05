@@ -134,6 +134,15 @@ export type PageBuilderSection =
   | PageBuilderAtom
   | CbButton
   | PageBuilderContainer
+  | AboutPageHero
+  | AboutPageOriginSection
+  | AboutPageWhoWeServeSection
+  | AboutPageTimelineSection
+  | HomePageHero
+  | HomePageBelowFold
+  | HomePageSectorsSection
+  | HomePageCompaniesSection
+  | HomePageNewsSection
   | LegacyCallToAction
   | LegacyInfoSection
 
@@ -173,6 +182,166 @@ export type CbCover = {
   // Legacy field
   url?: string | null
   content?: PageBuilderSection[] | null
+}
+
+export type HomePageHero = {
+  _key?: string
+  _type?: 'homePageHero'
+  backgroundMedia?: CbMedia | null
+  headline?: string | null
+  description?: string | null
+  ctaLabel?: string | null
+  ctaLink?: CbLink | null
+  phrases?: string[] | null
+}
+
+export type AboutPageHero = {
+  _key?: string
+  _type?: 'aboutPageHero'
+  backgroundColor?: string | null
+  personName?: string | null
+  personRole?: string | null
+  quote?: string | null
+  media?: CbMedia | null
+  posterImage?: {
+    asset?: {_ref?: string} | null
+    alt?: string | null
+  } | null
+  mediaCaption?: string | null
+}
+
+export type AboutPageOriginSection = {
+  _key?: string
+  _type?: 'aboutPageOriginSection'
+  backgroundColor?: string | null
+  image?: {
+    asset?: {_ref?: string} | null
+    alt?: string | null
+  } | null
+  imageBadgeLabel?: string | null
+  heading?: string | null
+  body?: string | null
+  ctaLabel?: string | null
+  ctaLink?: CbLink | null
+}
+
+export type AboutPageWhoWeServeAudienceItem = {
+  _key?: string
+  label?: string | null
+}
+
+export type AboutPageWhoWeServeSection = {
+  _key?: string
+  _type?: 'aboutPageWhoWeServeSection'
+  backgroundColor?: string | null
+  heading?: string | null
+  body?: string | null
+  ctaLabel?: string | null
+  ctaLink?: CbLink | null
+  audiencePanelBackground?: string | null
+  audienceItems?: AboutPageWhoWeServeAudienceItem[] | null
+}
+
+export type AboutPageTimelineItem = {
+  _key?: string
+  year?: string | null
+  description?: string | null
+}
+
+export type AboutPageTimelineSection = {
+  _key?: string
+  _type?: 'aboutPageTimelineSection'
+  backgroundImage?: {
+    asset?: {_ref?: string} | null
+    alt?: string | null
+  } | null
+  timelineItems?: AboutPageTimelineItem[] | null
+}
+
+export type HomePageBelowFoldStat = {
+  _key?: string
+  value?: string | null
+  label?: string | null
+  subLabel?: string | null
+  variant?: 'dark' | 'blue' | 'outline' | null
+}
+
+export type HomePageBelowFold = {
+  _key?: string
+  _type?: 'homePageBelowFold'
+  introImage?: {
+    asset?: {_ref?: string} | null
+    alt?: string | null
+  } | null
+  headline?: string | null
+  description?: string | null
+  ctaLabel?: string | null
+  ctaLink?: CbLink | null
+  stats?: HomePageBelowFoldStat[] | null
+}
+
+export type HomePageSectorsSection = {
+  _key?: string
+  _type?: 'homePageSectorsSection'
+  heading?: string | null
+  leftImage?: {
+    asset?: {_ref?: string} | null
+    alt?: string | null
+  } | null
+  rightImage?: {
+    asset?: {_ref?: string} | null
+    alt?: string | null
+  } | null
+  rightImageLink?: CbLink | null
+}
+
+export type HomePageCompaniesItem = {
+  _key?: string
+  title?: string | null
+  label?: string | null
+  link?: CbLink | null
+}
+
+export type HomePageCompaniesSection = {
+  _key?: string
+  _type?: 'homePageCompaniesSection'
+  backgroundColor?: string | null
+  backgroundImage?: {
+    asset?: {_ref?: string} | null
+    alt?: string | null
+  } | null
+  heading?: string | null
+  companies?: HomePageCompaniesItem[] | null
+}
+
+export type PostDocument = {
+  _id?: string
+  title?: string | null
+  slug?: {current?: string | null} | null
+  publishedAt?: string | null
+  cardImage?: {
+    asset?: {_ref?: string} | null
+    alt?: string | null
+  } | null
+  excerpt?: string | null
+  link?: CbLink | null
+}
+
+export type HomePageNewsCardItem = {
+  _key?: string
+  post?: PostDocument | null
+  linkLabel?: string | null
+}
+
+export type HomePageNewsSection = {
+  _key?: string
+  _type?: 'homePageNewsSection'
+  backgroundColor?: string | null
+  featuredPost?: PostDocument | null
+  featuredLinkLabel?: string | null
+  cards?: HomePageNewsCardItem[] | null
+  backToTopLabel?: string | null
+  backToTopLink?: CbLink | null
 }
 
 export type ExtractPageBuilderType<T extends string> = Extract<PageBuilderSection, {_type: T}>

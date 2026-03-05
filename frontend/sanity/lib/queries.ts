@@ -28,6 +28,10 @@ export const settingsQuery = defineQuery(`
 export const headerQuery = defineQuery(`
   *[_type == "header"][0]{
     ...,
+    brandLink{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    },
     ctaLink{
       ...,
       "internalPageSlug": internalPage->slug.current
@@ -42,6 +46,19 @@ export const headerQuery = defineQuery(`
       ...,
       links[]{
         ${navigationLinksProjection}
+      }
+    },
+    submenuGroups[]{
+      ...,
+      groups[]{
+        ...,
+        links[]{
+          ...,
+          link{
+            ...,
+            "internalPageSlug": internalPage->slug.current
+          }
+        }
       }
     }
   }
@@ -63,6 +80,12 @@ export const footerQuery = defineQuery(`
       }
     },
     menuGroups[]{
+      ...,
+      links[]{
+        ${navigationLinksProjection}
+      }
+    },
+    navigationGroups[]{
       ...,
       links[]{
         ${navigationLinksProjection}
@@ -107,6 +130,102 @@ const cbNavigationWithLinksProjection = /* groq */ `
   }
 `
 
+const homePageHeroWithLinkProjection = /* groq */ `
+  _type == "homePageHero" => {
+    ...,
+    ctaLink{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    }
+  }
+`
+
+const aboutPageHeroWithLinkProjection = /* groq */ `
+  _type == "aboutPageHero" => {
+    ...
+  }
+`
+
+const aboutPageOriginSectionWithLinkProjection = /* groq */ `
+  _type == "aboutPageOriginSection" => {
+    ...,
+    ctaLink{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    }
+  }
+`
+
+const aboutPageWhoWeServeSectionWithLinkProjection = /* groq */ `
+  _type == "aboutPageWhoWeServeSection" => {
+    ...,
+    ctaLink{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    }
+  }
+`
+
+const homePageBelowFoldWithLinkProjection = /* groq */ `
+  _type == "homePageBelowFold" => {
+    ...,
+    ctaLink{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    }
+  }
+`
+
+const homePageSectorsSectionWithLinkProjection = /* groq */ `
+  _type == "homePageSectorsSection" => {
+    ...,
+    rightImageLink{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    }
+  }
+`
+
+const homePageCompaniesSectionWithLinkProjection = /* groq */ `
+  _type == "homePageCompaniesSection" => {
+    ...,
+    companies[]{
+      ...,
+      link{
+        ...,
+        "internalPageSlug": internalPage->slug.current
+      }
+    }
+  }
+`
+
+const homePageNewsSectionWithLinkProjection = /* groq */ `
+  _type == "homePageNewsSection" => {
+    ...,
+    featuredPost->{
+      ...,
+      link{
+        ...,
+        "internalPageSlug": internalPage->slug.current
+      }
+    },
+    cards[]{
+      ...,
+      post->{
+        ...,
+        link{
+          ...,
+          "internalPageSlug": internalPage->slug.current
+        }
+      }
+    },
+    backToTopLink{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    }
+  }
+`
+
 const cbWysiwygWithResolvedLinksProjection = /* groq */ `
   _type == "cbWysiwyg" => {
     ...,
@@ -147,6 +266,14 @@ export const getPageQuery = defineQuery(`
       ${cbButtonWithLinkProjection},
       ${cbButtonsWithLinksProjection},
       ${cbNavigationWithLinksProjection},
+      ${aboutPageHeroWithLinkProjection},
+      ${aboutPageOriginSectionWithLinkProjection},
+      ${aboutPageWhoWeServeSectionWithLinkProjection},
+      ${homePageHeroWithLinkProjection},
+      ${homePageBelowFoldWithLinkProjection},
+      ${homePageSectorsSectionWithLinkProjection},
+      ${homePageCompaniesSectionWithLinkProjection},
+      ${homePageNewsSectionWithLinkProjection},
       ${cbWysiwygWithResolvedLinksProjection},
       _type == "cbGroup" => {
         ...,
@@ -155,6 +282,13 @@ export const getPageQuery = defineQuery(`
           ${cbButtonWithLinkProjection},
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
+          ${aboutPageHeroWithLinkProjection},
+          ${aboutPageOriginSectionWithLinkProjection},
+          ${aboutPageWhoWeServeSectionWithLinkProjection},
+          ${homePageBelowFoldWithLinkProjection},
+          ${homePageSectorsSectionWithLinkProjection},
+          ${homePageCompaniesSectionWithLinkProjection},
+          ${homePageNewsSectionWithLinkProjection},
           ${cbWysiwygWithResolvedLinksProjection}
         }
       },
@@ -165,6 +299,13 @@ export const getPageQuery = defineQuery(`
           ${cbButtonWithLinkProjection},
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
+          ${aboutPageHeroWithLinkProjection},
+          ${aboutPageOriginSectionWithLinkProjection},
+          ${aboutPageWhoWeServeSectionWithLinkProjection},
+          ${homePageBelowFoldWithLinkProjection},
+          ${homePageSectorsSectionWithLinkProjection},
+          ${homePageCompaniesSectionWithLinkProjection},
+          ${homePageNewsSectionWithLinkProjection},
           ${cbWysiwygWithResolvedLinksProjection}
         }
       },
@@ -175,6 +316,13 @@ export const getPageQuery = defineQuery(`
           ${cbButtonWithLinkProjection},
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
+          ${aboutPageHeroWithLinkProjection},
+          ${aboutPageOriginSectionWithLinkProjection},
+          ${aboutPageWhoWeServeSectionWithLinkProjection},
+          ${homePageBelowFoldWithLinkProjection},
+          ${homePageSectorsSectionWithLinkProjection},
+          ${homePageCompaniesSectionWithLinkProjection},
+          ${homePageNewsSectionWithLinkProjection},
           ${cbWysiwygWithResolvedLinksProjection}
         }
       },
@@ -187,6 +335,13 @@ export const getPageQuery = defineQuery(`
             ${cbButtonWithLinkProjection},
             ${cbButtonsWithLinksProjection},
             ${cbNavigationWithLinksProjection},
+            ${aboutPageHeroWithLinkProjection},
+            ${aboutPageOriginSectionWithLinkProjection},
+            ${aboutPageWhoWeServeSectionWithLinkProjection},
+            ${homePageBelowFoldWithLinkProjection},
+            ${homePageSectorsSectionWithLinkProjection},
+            ${homePageCompaniesSectionWithLinkProjection},
+            ${homePageNewsSectionWithLinkProjection},
             ${cbWysiwygWithResolvedLinksProjection}
           }
         }
@@ -216,6 +371,14 @@ export const homePageQuery = defineQuery(`
       ${cbButtonWithLinkProjection},
       ${cbButtonsWithLinksProjection},
       ${cbNavigationWithLinksProjection},
+      ${aboutPageHeroWithLinkProjection},
+      ${aboutPageOriginSectionWithLinkProjection},
+      ${aboutPageWhoWeServeSectionWithLinkProjection},
+      ${homePageHeroWithLinkProjection},
+      ${homePageBelowFoldWithLinkProjection},
+      ${homePageSectorsSectionWithLinkProjection},
+      ${homePageCompaniesSectionWithLinkProjection},
+      ${homePageNewsSectionWithLinkProjection},
       ${cbWysiwygWithResolvedLinksProjection},
       _type == "cbGroup" => {
         ...,
@@ -224,6 +387,13 @@ export const homePageQuery = defineQuery(`
           ${cbButtonWithLinkProjection},
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
+          ${aboutPageHeroWithLinkProjection},
+          ${aboutPageOriginSectionWithLinkProjection},
+          ${aboutPageWhoWeServeSectionWithLinkProjection},
+          ${homePageBelowFoldWithLinkProjection},
+          ${homePageSectorsSectionWithLinkProjection},
+          ${homePageCompaniesSectionWithLinkProjection},
+          ${homePageNewsSectionWithLinkProjection},
           ${cbWysiwygWithResolvedLinksProjection}
         }
       },
@@ -234,6 +404,13 @@ export const homePageQuery = defineQuery(`
           ${cbButtonWithLinkProjection},
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
+          ${aboutPageHeroWithLinkProjection},
+          ${aboutPageOriginSectionWithLinkProjection},
+          ${aboutPageWhoWeServeSectionWithLinkProjection},
+          ${homePageBelowFoldWithLinkProjection},
+          ${homePageSectorsSectionWithLinkProjection},
+          ${homePageCompaniesSectionWithLinkProjection},
+          ${homePageNewsSectionWithLinkProjection},
           ${cbWysiwygWithResolvedLinksProjection}
         }
       },
@@ -244,6 +421,13 @@ export const homePageQuery = defineQuery(`
           ${cbButtonWithLinkProjection},
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
+          ${aboutPageHeroWithLinkProjection},
+          ${aboutPageOriginSectionWithLinkProjection},
+          ${aboutPageWhoWeServeSectionWithLinkProjection},
+          ${homePageBelowFoldWithLinkProjection},
+          ${homePageSectorsSectionWithLinkProjection},
+          ${homePageCompaniesSectionWithLinkProjection},
+          ${homePageNewsSectionWithLinkProjection},
           ${cbWysiwygWithResolvedLinksProjection}
         }
       },
@@ -256,6 +440,13 @@ export const homePageQuery = defineQuery(`
             ${cbButtonWithLinkProjection},
             ${cbButtonsWithLinksProjection},
             ${cbNavigationWithLinksProjection},
+            ${aboutPageHeroWithLinkProjection},
+            ${aboutPageOriginSectionWithLinkProjection},
+            ${aboutPageWhoWeServeSectionWithLinkProjection},
+            ${homePageBelowFoldWithLinkProjection},
+            ${homePageSectorsSectionWithLinkProjection},
+            ${homePageCompaniesSectionWithLinkProjection},
+            ${homePageNewsSectionWithLinkProjection},
             ${cbWysiwygWithResolvedLinksProjection}
           }
         }
@@ -339,5 +530,36 @@ export const legalPageLanguagesBySlugQuery = defineQuery(`
     slug == $slug
   ]{
     "language": coalesce(language, "en")
+  }
+`)
+
+export const postBySlugQuery = defineQuery(`
+  *[
+    _type == "post" &&
+    slug.current == $slug &&
+    coalesce(language, "en") == $language
+  ][0]{
+    _id,
+    _type,
+    title,
+    slug,
+    language,
+    publishedAt,
+    cardImage,
+    excerpt,
+    link{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    }
+  }
+`)
+
+export const postSlugsQuery = defineQuery(`
+  *[
+    _type == "post" &&
+    defined(slug.current) &&
+    coalesce(language, "en") == $language
+  ]{
+    "slug": slug.current
   }
 `)

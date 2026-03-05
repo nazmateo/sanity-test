@@ -81,23 +81,6 @@ export type BlockContent = Array<
     }
 >
 
-export type FooterSettings = {
-  _type: 'footerSettings'
-  heading?: string
-  menu: MenuGroup
-  legalMenu?: MenuGroup
-  showDefaultLegalLinks?: boolean
-  copyrightText?: string
-}
-
-export type HeaderSettings = {
-  _type: 'headerSettings'
-  primaryMenu: MenuGroup
-  secondaryMenu: MenuGroup
-  ctaLabel?: string
-  ctaLink?: CbLink
-}
-
 export type CbWysiwyg = {
   _type: 'cbWysiwyg'
   content?: BlockContentTextOnly
@@ -353,6 +336,43 @@ export type CbButton = {
   link?: CbLink
 }
 
+export type Footer = {
+  _id: string
+  _type: 'footer'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  heading?: string
+  officeHeading?: string
+  officeAddressOne?: string
+  officeAddressTwo?: string
+  phone?: string
+  email?: string
+  menu: MenuGroup
+  menuGroups?: Array<
+    {
+      _key: string
+    } & MenuGroup
+  >
+  legalMenu?: MenuGroup
+  showDefaultLegalLinks?: boolean
+  copyrightText?: string
+}
+
+export type Header = {
+  _id: string
+  _type: 'header'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  primaryMenu: MenuGroup
+  secondaryMenu: MenuGroup
+  languageToggleLabel?: string
+  languageTogglePath?: string
+  ctaLabel?: string
+  ctaLink?: CbLink
+}
+
 export type Settings = {
   _id: string
   _type: 'settings'
@@ -389,15 +409,6 @@ export type Settings = {
     alt: string
     _type: 'image'
   }
-  header?: HeaderSettings
-  footer?: FooterSettings
-  primaryMenu: MenuGroup
-  secondaryMenu: MenuGroup
-  menuGroups?: Array<
-    {
-      _key: string
-    } & MenuGroup
-  >
   ogImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
@@ -831,8 +842,6 @@ export type AllSanitySchemaTypes =
   | BlockContentTextOnly
   | SanityImageAssetReference
   | BlockContent
-  | FooterSettings
-  | HeaderSettings
   | CbWysiwyg
   | CbParagraph
   | CbNavigation
@@ -854,6 +863,8 @@ export type AllSanitySchemaTypes =
   | CbColumn
   | CbButtons
   | CbButton
+  | Footer
+  | Header
   | Settings
   | SanityImageCrop
   | SanityImageHotspot

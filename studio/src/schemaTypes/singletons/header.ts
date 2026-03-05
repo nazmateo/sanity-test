@@ -1,5 +1,5 @@
 import {DocumentIcon} from '@sanity/icons'
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export const header = defineType({
   name: 'header',
@@ -7,6 +7,32 @@ export const header = defineType({
   type: 'document',
   icon: DocumentIcon,
   fields: [
+    defineField({
+      name: 'brandImage',
+      title: 'Center Brand Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+          validation: (rule) => rule.required().warning('Brand image alt text improves accessibility.'),
+        }),
+      ],
+    }),
+    defineField({
+      name: 'brandLink',
+      title: 'Center Brand Link',
+      type: 'cbLink',
+      initialValue: {
+        linkType: 'internal',
+        internalTargetType: 'path',
+        internalPath: '/',
+      },
+    }),
     defineField({
       name: 'primaryMenu',
       title: 'Primary menu',
@@ -44,6 +70,54 @@ export const header = defineType({
           }
           return true
         }),
+    }),
+    defineField({
+      name: 'submenuGroups',
+      title: 'Submenu Groups',
+      description: 'Dropdown panel configuration keyed by parent menu item ID.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          name: 'headerSubmenuConfig',
+          title: 'Header Submenu Config',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'parentItemId',
+              title: 'Parent Menu Item ID',
+              type: 'string',
+              validation: (rule) => rule.required(),
+            }),
+            defineField({
+              name: 'groups',
+              title: 'Panels',
+              type: 'array',
+              validation: (rule) => rule.required().min(1).max(2),
+              of: [
+                defineArrayMember({
+                  name: 'headerSubmenuPanel',
+                  title: 'Panel',
+                  type: 'object',
+                  fields: [
+                    defineField({
+                      name: 'title',
+                      title: 'Panel Title',
+                      type: 'string',
+                    }),
+                    defineField({
+                      name: 'links',
+                      title: 'Links',
+                      type: 'array',
+                      validation: (rule) => rule.required().min(1),
+                      of: [defineArrayMember({type: 'menuSubLink'})],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
     }),
     defineField({
       name: 'languageToggleLabel',

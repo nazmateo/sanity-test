@@ -1,6 +1,15 @@
 import CTA from '@/app/components/Cta'
 import InfoSection from '@/app/components/InfoSection'
 import CustomPortableText from '@/app/components/PortableText'
+import AboutHeroSection from '@/app/components/about/AboutHeroSection'
+import AboutOriginSection from '@/app/components/about/AboutOriginSection'
+import AboutTimelineSection from '@/app/components/about/AboutTimelineSection'
+import AboutWhoWeServeSection from '@/app/components/about/AboutWhoWeServeSection'
+import BelowTheFoldSection from '@/app/components/home/BelowTheFoldSection'
+import CompaniesSection from '@/app/components/home/CompaniesSection'
+import HeroSection from '@/app/components/home/HeroSection'
+import NewsSection from '@/app/components/home/NewsSection'
+import SectorsSection from '@/app/components/home/SectorsSection'
 import type {PortableTextBlock} from 'next-sanity'
 import {Button} from '@/app/components/atoms/button'
 import {Heading} from '@/app/components/atoms/heading'
@@ -17,6 +26,7 @@ import {Navigation} from '@/app/components/molecules/navigation'
 import {BlockSlot} from '@/app/components/organisms/block-slot'
 import {Columns} from '@/app/components/organisms/columns'
 import {Cover} from '@/app/components/organisms/cover'
+import {fileAssetRefToUrl, imageAssetRefToUrl} from '@/app/components/lib/sanityAsset'
 import {
   type CbButton,
   type CbColumn,
@@ -24,6 +34,15 @@ import {
   type CbGroup,
   type CbLink,
   type CbMedia,
+  type AboutPageHero,
+  type AboutPageOriginSection,
+  type AboutPageTimelineSection,
+  type AboutPageWhoWeServeSection,
+  type HomePageBelowFold,
+  type HomePageCompaniesSection,
+  type HomePageSectorsSection,
+  type HomePageHero,
+  type HomePageNewsSection,
   type PageBuilderSection,
 } from '@/sanity/lib/types'
 import {dataAttr} from '@/sanity/lib/utils'
@@ -90,44 +109,6 @@ function normalizeHeadingLevel(
   }
 
   return 'h2'
-}
-
-function imageAssetRefToUrl(ref?: string | null): string | null {
-  if (!ref) {
-    return null
-  }
-
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
-  if (!projectId || !dataset) {
-    return null
-  }
-
-  const match = ref.match(/^image-([^-]+-\d+x\d+)-([a-z0-9]+)$/i)
-  if (!match) {
-    return null
-  }
-
-  return `https://cdn.sanity.io/images/${projectId}/${dataset}/${match[1]}.${match[2]}`
-}
-
-function fileAssetRefToUrl(ref?: string | null): string | null {
-  if (!ref) {
-    return null
-  }
-
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
-  if (!projectId || !dataset) {
-    return null
-  }
-
-  const match = ref.match(/^file-([^-]+)-([a-z0-9]+)$/i)
-  if (!match) {
-    return null
-  }
-
-  return `https://cdn.sanity.io/files/${projectId}/${dataset}/${match[1]}.${match[2]}`
 }
 
 function resolveMediaUrls(media?: CbMedia | null) {
@@ -561,6 +542,114 @@ export default function BlockRenderer({
         </BlockSlot>
       )
     }
+    case 'homePageHero':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <HeroSection hero={block as HomePageHero} />
+        </BlockSlot>
+      )
+    case 'aboutPageHero':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <AboutHeroSection section={block as AboutPageHero} />
+        </BlockSlot>
+      )
+    case 'aboutPageOriginSection':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <AboutOriginSection section={block as AboutPageOriginSection} />
+        </BlockSlot>
+      )
+    case 'aboutPageWhoWeServeSection':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <AboutWhoWeServeSection section={block as AboutPageWhoWeServeSection} />
+        </BlockSlot>
+      )
+    case 'aboutPageTimelineSection':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <AboutTimelineSection section={block as AboutPageTimelineSection} />
+        </BlockSlot>
+      )
+    case 'homePageBelowFold':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <BelowTheFoldSection section={block as HomePageBelowFold} />
+        </BlockSlot>
+      )
+    case 'homePageSectorsSection':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <SectorsSection section={block as HomePageSectorsSection} />
+        </BlockSlot>
+      )
+    case 'homePageCompaniesSection':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <CompaniesSection section={block as HomePageCompaniesSection} />
+        </BlockSlot>
+      )
+    case 'homePageNewsSection':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <NewsSection section={block as HomePageNewsSection} />
+        </BlockSlot>
+      )
     case 'callToAction':
       return (
         <BlockSlot

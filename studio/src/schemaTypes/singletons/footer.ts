@@ -9,9 +9,19 @@ export const footer = defineType({
   fields: [
     defineField({
       name: 'heading',
-      title: 'Heading',
-      type: 'string',
-      initialValue: 'Brand logo',
+      title: 'Heading Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+          validation: (rule) => rule.required().warning('Heading image alt text improves accessibility.'),
+        }),
+      ],
     }),
     defineField({
       name: 'officeHeading',
@@ -83,6 +93,14 @@ export const footer = defineType({
           }
           return true
         }),
+    }),
+    defineField({
+      name: 'navigationGroups',
+      title: 'Right navigation groups',
+      description: 'Three navigation columns shown on the right side of the footer.',
+      type: 'array',
+      of: [defineArrayMember({type: 'menuGroup'})],
+      validation: (rule) => rule.max(3),
     }),
     defineField({
       name: 'legalMenu',

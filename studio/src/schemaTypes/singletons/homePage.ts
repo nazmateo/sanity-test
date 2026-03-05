@@ -1,7 +1,16 @@
 import {DocumentIcon} from '@sanity/icons'
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 
 import {pageBuilderContainerBlockTypes} from '../objects/pageBuilderBlockTypes'
+
+const homePageBuilderBlockTypes = [
+  ...pageBuilderContainerBlockTypes,
+  defineArrayMember({type: 'homePageHero'}),
+  defineArrayMember({type: 'homePageBelowFold'}),
+  defineArrayMember({type: 'homePageSectorsSection'}),
+  defineArrayMember({type: 'homePageCompaniesSection'}),
+  defineArrayMember({type: 'homePageNewsSection'}),
+]
 
 export const homePage = defineType({
   name: 'homePage',
@@ -37,7 +46,7 @@ export const homePage = defineType({
       title: 'Page builder',
       type: 'array',
       group: 'content',
-      of: pageBuilderContainerBlockTypes,
+      of: homePageBuilderBlockTypes,
       options: {
         insertMenu: {
           views: [

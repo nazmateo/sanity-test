@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import type {LayoutSettings} from '@/app/components/Header'
+import Image from '@/app/components/SanityImage'
 import {isExternalContentLink, resolveContentLinkHref} from '@/sanity/lib/utils'
 
 type FooterLink = {
@@ -16,6 +17,11 @@ type FooterLink = {
     openInNewTab?: boolean | null
   } | null
 }
+
+type FooterHeadingImageValue = {
+  asset?: {_ref?: string} | null
+  alt?: string | null
+} | null
 
 function FooterLinkItem({item}: {item: FooterLink}) {
   const href = resolveContentLinkHref(item.link || null)
@@ -44,7 +50,9 @@ function FooterColumn({title, links}: {title: string; links: FooterLink[]}) {
 
   return (
     <div className="w-full md:w-[247px]">
-      <h4 className="py-2 text-2xl text-[var(--color-albatha-blue)]">{title}</h4>
+      <h4 className="min-h-[52px] py-2 text-2xl text-[var(--color-albatha-blue)]">
+        {title?.trim() ? title : '\u00A0'}
+      </h4>
       <div className="mt-4 flex flex-col text-xl text-[var(--color-albatha-midnight)]">
         {links.map((item, index) => (
           <FooterLinkItem key={item.itemId || item._key || `${title}-${index}`} item={item} />
@@ -65,11 +73,6 @@ function renderMultilineText(value?: string | null) {
   ))
 }
 
-function splitLinks(links: FooterLink[]): [FooterLink[], FooterLink[]] {
-  const middle = Math.ceil(links.length / 2)
-  return [links.slice(0, middle), links.slice(middle)]
-}
-
 function Wordmark({title}: {title?: string | null}) {
   return (
     <Link href="/" className="inline-flex items-center gap-3 text-[var(--color-albatha-midnight)]">
@@ -79,25 +82,46 @@ function Wordmark({title}: {title?: string | null}) {
   )
 }
 
+function FooterHeadingImage({
+  heading,
+  fallbackTitle,
+}: {
+  heading?: FooterHeadingImageValue
+  fallbackTitle?: string | null
+}) {
+  const imageRef = heading?.asset?._ref
+  const imageAlt = heading?.alt
+
+  if (imageRef) {
+    return (
+      <Link href="/" className="inline-flex items-center">
+        <Image
+          id={imageRef}
+          alt={imageAlt || fallbackTitle || 'Albatha'}
+          width={260}
+          height={60}
+          mode="contain"
+          className="h-auto w-[260px]"
+        />
+      </Link>
+    )
+  }
+
+  return <Wordmark title={fallbackTitle} />
+}
+
 export default function Footer({settings}: {settings?: LayoutSettings | null}) {
   const footerConfig = settings?.footer
   const allFooterGroups = footerConfig?.menuGroups || settings?.menuGroups || []
+  const configuredNavigationGroups = footerConfig?.navigationGroups || []
   const footerMenuGroup = allFooterGroups.find((group) => group?.menuId === 'footer')
   const legalLinks = footerConfig?.legalMenu?.links || []
   const defaultFooterLinks = (footerConfig?.menu?.links || footerMenuGroup?.links || []) as FooterLink[]
-  const additionalGroups = allFooterGroups
+  const fallbackGroups = allFooterGroups
     .filter((group) => group?.menuId !== 'footer')
-    .slice(0, 2)
-
-  const firstColumnLinks =
-    additionalGroups[0]?.links?.length && additionalGroups[0].links
-      ? (additionalGroups[0].links as FooterLink[])
-      : defaultFooterLinks.slice(0, 4)
-
-  const [secondLinks, thirdLinks] =
-    additionalGroups[1]?.links?.length && additionalGroups[1].links
-      ? splitLinks(additionalGroups[1].links as FooterLink[])
-      : splitLinks(defaultFooterLinks.slice(4))
+    .slice(0, 3)
+  const navigationGroups =
+    configuredNavigationGroups.length > 0 ? configuredNavigationGroups.slice(0, 3) : fallbackGroups
 
   const officeHeading = footerConfig?.officeHeading || 'Albatha Head Offices'
   const officeAddressOne =
@@ -111,7 +135,7 @@ export default function Footer({settings}: {settings?: LayoutSettings | null}) {
       <div className="mx-auto w-[min(1600px,calc(100%-2rem))] py-20">
         <div className="grid gap-12 lg:grid-cols-[1.05fr_1.4fr]">
           <section className="max-w-[560px]">
-            <Wordmark title={settings?.title} />
+            <FooterHeadingImage heading={footerConfig?.heading} fallbackTitle={settings?.title} />
             <div className="mt-8 grid gap-6 text-lg leading-[1.4] md:grid-cols-2">
               <p>
                 <strong className="mb-5 block text-xl font-medium">{officeHeading}</strong>
@@ -128,13 +152,16 @@ export default function Footer({settings}: {settings?: LayoutSettings | null}) {
           </section>
 
           <section className="grid gap-6 md:grid-cols-3 md:gap-4">
-            <FooterColumn title={additionalGroups[0]?.title || 'Albatha Links'} links={firstColumnLinks} />
-            <FooterColumn title={additionalGroups[1]?.title || 'Businesses Units'} links={secondLinks} />
-            <div className="mt-12 flex flex-col text-xl text-[var(--color-albatha-midnight)] md:mt-0">
-              {thirdLinks.map((item, index) => (
-                <FooterLinkItem key={item.itemId || item._key || `tail-${index}`} item={item} />
-              ))}
-            </div>
+            {navigationGroups.map((group, index) => (
+              <FooterColumn
+                key={group?.menuId || group?._key || `nav-group-${index}`}
+                title={group?.title || (index === 0 ? 'Albatha Links' : index === 1 ? 'Businesses Units' : 'More')}
+                links={((group?.links || []) as FooterLink[]).slice(0, 8)}
+              />
+            ))}
+            {navigationGroups.length === 0 ? (
+              <FooterColumn title="Albatha Links" links={defaultFooterLinks.slice(0, 8)} />
+            ) : null}
           </section>
         </div>
 

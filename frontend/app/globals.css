@@ -37,6 +37,30 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@keyframes heroPhraseCascade {
+  from {
+    opacity: 0;
+    transform: translate3d(14px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.hero-phrase {
+  opacity: 0;
+  animation: heroPhraseCascade 700ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-phrase {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @theme {
   --shadow-layer: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
 

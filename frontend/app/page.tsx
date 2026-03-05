@@ -93,16 +93,7 @@ export default async function HomePage() {
       {customStructuredData ? (
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(customStructuredData)}} />
       ) : null}
-      <div className="my-12 lg:my-24">
-        <div className="container">
-          <div className="pb-6 border-b border-gray-100">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl text-gray-900 sm:text-5xl lg:text-7xl">{pageWithSeo.name}</h1>
-            </div>
-          </div>
-        </div>
-        <PageBuilderPage page={page as any} />
-      </div>
+      <PageBuilderPage page={page as any} />
     </>
   )
 }
