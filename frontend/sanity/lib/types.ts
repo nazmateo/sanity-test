@@ -135,6 +135,7 @@ export type PageBuilderSection =
   | CbButton
   | PageBuilderContainer
   | AboutPageHero
+  | AboutPageLeadershipSection
   | AboutPageOriginSection
   | AboutPageWhoWeServeSection
   | AboutPageTimelineSection
@@ -256,6 +257,24 @@ export type AboutPageTimelineSection = {
     alt?: string | null
   } | null
   timelineItems?: AboutPageTimelineItem[] | null
+}
+
+export type AboutPageLeadershipProfile = {
+  _key?: string
+  name?: string | null
+  role?: string | null
+  bio?: string | null
+}
+
+export type AboutPageLeadershipSection = {
+  _key?: string
+  _type?: 'aboutPageLeadershipSection'
+  backgroundColor?: string | null
+  heading?: string | null
+  body?: string | null
+  ctaLabel?: string | null
+  ctaLink?: CbLink | null
+  leaders?: AboutPageLeadershipProfile[] | null
 }
 
 export type HomePageBelowFoldStat = {

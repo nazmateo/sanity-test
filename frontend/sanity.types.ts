@@ -191,6 +191,105 @@ export type CbImage = {
   media?: CbMedia
 }
 
+export type HomePageSectorsSection = {
+  _type: 'homePageSectorsSection'
+  heading: string
+  leftImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  rightImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  rightImageLink: CbLink
+}
+
+export type PostReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'post'
+}
+
+export type HomePageNewsSection = {
+  _type: 'homePageNewsSection'
+  backgroundColor: string
+  featuredPost?: PostReference
+  featuredLinkLabel?: string
+  cards?: Array<{
+    post?: PostReference
+    linkLabel?: string
+    _type: 'homePageNewsCardItem'
+    _key: string
+  }>
+  backToTopLabel?: string
+  backToTopLink?: CbLink
+}
+
+export type HomePageHero = {
+  _type: 'homePageHero'
+  backgroundMedia: CbMedia
+  headline: string
+  description: string
+  ctaLabel: string
+  ctaLink: CbLink
+  phrases: Array<string>
+}
+
+export type HomePageCompaniesSection = {
+  _type: 'homePageCompaniesSection'
+  backgroundColor: string
+  backgroundImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  heading: string
+  companies: Array<{
+    title: string
+    label: string
+    link: CbLink
+    _type: 'homePageCompaniesItem'
+    _key: string
+  }>
+}
+
+export type HomePageBelowFold = {
+  _type: 'homePageBelowFold'
+  introImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  headline: string
+  description: string
+  ctaLabel: string
+  ctaLink: CbLink
+  stats: Array<{
+    value: string
+    label: string
+    subLabel?: string
+    variant: 'dark' | 'blue' | 'outline'
+    _type: 'homePageBelowFoldStat'
+    _key: string
+  }>
+}
+
 export type CbHtml = {
   _type: 'cbHtml'
   content?: string
@@ -336,13 +435,89 @@ export type CbButton = {
   link?: CbLink
 }
 
+export type AboutPageTimelineSection = {
+  _type: 'aboutPageTimelineSection'
+  backgroundImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  timelineItems: Array<{
+    year: string
+    description: string
+    _type: 'timelineItem'
+    _key: string
+  }>
+}
+
+export type AboutPageWhoWeServeSection = {
+  _type: 'aboutPageWhoWeServeSection'
+  backgroundColor?: string
+  heading: string
+  body: string
+  ctaLabel: string
+  ctaLink: CbLink
+  audiencePanelBackground?: string
+  audienceItems: Array<{
+    label: string
+    _type: 'audienceItem'
+    _key: string
+  }>
+}
+
+export type AboutPageOriginSection = {
+  _type: 'aboutPageOriginSection'
+  backgroundColor?: string
+  image: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  imageBadgeLabel: string
+  heading: string
+  body: string
+  ctaLabel: string
+  ctaLink: CbLink
+}
+
+export type AboutPageHero = {
+  _type: 'aboutPageHero'
+  backgroundColor?: string
+  personName: string
+  personRole: string
+  quote: string
+  media: CbMedia
+  posterImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  mediaCaption: string
+}
+
 export type Footer = {
   _id: string
   _type: 'footer'
   _createdAt: string
   _updatedAt: string
   _rev: string
-  heading?: string
+  heading?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt: string
+    _type: 'image'
+  }
   officeHeading?: string
   officeAddressOne?: string
   officeAddressTwo?: string
@@ -354,9 +529,30 @@ export type Footer = {
       _key: string
     } & MenuGroup
   >
+  navigationGroups?: Array<
+    {
+      _key: string
+    } & MenuGroup
+  >
   legalMenu?: MenuGroup
   showDefaultLegalLinks?: boolean
   copyrightText?: string
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type Header = {
@@ -365,8 +561,32 @@ export type Header = {
   _createdAt: string
   _updatedAt: string
   _rev: string
+  brandImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt: string
+    _type: 'image'
+  }
+  brandLink?: CbLink
   primaryMenu: MenuGroup
   secondaryMenu: MenuGroup
+  submenuGroups?: Array<{
+    parentItemId: string
+    groups: Array<{
+      title?: string
+      links: Array<
+        {
+          _key: string
+        } & MenuSubLink
+      >
+      _type: 'headerSubmenuPanel'
+      _key: string
+    }>
+    _type: 'headerSubmenuConfig'
+    _key: string
+  }>
   languageToggleLabel?: string
   languageTogglePath?: string
   ctaLabel?: string
@@ -421,22 +641,6 @@ export type Settings = {
   gtmScript?: string
   gaScript?: string
   cookiePolicyScript?: string
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type SanityAssistInstructionTask = {
@@ -638,6 +842,21 @@ export type HomePage = {
     | ({
         _key: string
       } & CbCover)
+    | ({
+        _key: string
+      } & HomePageHero)
+    | ({
+        _key: string
+      } & HomePageBelowFold)
+    | ({
+        _key: string
+      } & HomePageSectorsSection)
+    | ({
+        _key: string
+      } & HomePageCompaniesSection)
+    | ({
+        _key: string
+      } & HomePageNewsSection)
   >
   seo?: {
     metaTitle?: string
@@ -656,6 +875,34 @@ export type HomePage = {
     }
   }
   structuredData?: string
+}
+
+export type Post = {
+  _id: string
+  _type: 'post'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  language: string
+  publishedAt: string
+  cardImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  excerpt: string
+  link: CbLink
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
 }
 
 export type LegalPage = {
@@ -714,6 +961,18 @@ export type Page = {
     | ({
         _key: string
       } & CbCover)
+    | ({
+        _key: string
+      } & AboutPageHero)
+    | ({
+        _key: string
+      } & AboutPageOriginSection)
+    | ({
+        _key: string
+      } & AboutPageWhoWeServeSection)
+    | ({
+        _key: string
+      } & AboutPageTimelineSection)
   >
   seo?: {
     metaTitle?: string
@@ -732,12 +991,6 @@ export type Page = {
     }
   }
   structuredData?: string
-}
-
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
 }
 
 export type SanityImagePaletteSwatch = {
@@ -789,14 +1042,14 @@ export type SanityFileAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   source?: SanityAssetSourceData
 }
 
@@ -818,14 +1071,14 @@ export type SanityImageAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   metadata?: SanityImageMetadata
   source?: SanityAssetSourceData
 }
@@ -855,6 +1108,12 @@ export type AllSanitySchemaTypes =
   | CbListItem
   | CbLink
   | CbImage
+  | HomePageSectorsSection
+  | PostReference
+  | HomePageNewsSection
+  | HomePageHero
+  | HomePageCompaniesSection
+  | HomePageBelowFold
   | CbHtml
   | CbHeading
   | CbGroup
@@ -863,11 +1122,15 @@ export type AllSanitySchemaTypes =
   | CbColumn
   | CbButtons
   | CbButton
+  | AboutPageTimelineSection
+  | AboutPageWhoWeServeSection
+  | AboutPageOriginSection
+  | AboutPageHero
   | Footer
-  | Header
-  | Settings
   | SanityImageCrop
   | SanityImageHotspot
+  | Header
+  | Settings
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -887,9 +1150,10 @@ export type AllSanitySchemaTypes =
   | HomePageReference
   | InternationalizedArrayReferenceValue
   | HomePage
+  | Post
+  | Slug
   | LegalPage
   | Page
-  | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -952,14 +1216,14 @@ export type SettingsQueryResult = {
       title?: string
       description?: string
       altText?: string
-      sha1hash?: string
-      extension?: string
-      mimeType?: string
-      size?: number
-      assetId?: string
+      sha1hash: string
+      extension: string
+      mimeType: string
+      size: number
+      assetId: string
       uploadId?: string
-      path?: string
-      url?: string
+      path: string
+      url: string
       metadata?: SanityImageMetadata
       source?: SanityAssetSourceData
     } | null
@@ -977,13 +1241,31 @@ export type SettingsQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: headerQuery
-// Query: *[_type == "header"][0]{    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    },    primaryMenu{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    },    secondaryMenu{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    }  }
+// Query: *[_type == "header"][0]{    ...,    brandLink{      ...,      "internalPageSlug": internalPage->slug.current    },    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    },    primaryMenu{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    },    secondaryMenu{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    },    submenuGroups[]{      ...,      groups[]{        ...,        links[]{          ...,          link{            ...,            "internalPageSlug": internalPage->slug.current          }        }      }    }  }
 export type HeaderQueryResult = {
   _id: string
   _type: 'header'
   _createdAt: string
   _updatedAt: string
   _rev: string
+  brandImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt: string
+    _type: 'image'
+  }
+  brandLink: {
+    _type: 'cbLink'
+    linkType?: 'external' | 'internal'
+    externalUrl?: string
+    internalTargetType?: 'page' | 'path'
+    internalPage?: PageReference
+    internalPath?: string
+    openInNewTab?: boolean
+    internalPageSlug: string | null
+  } | null
   primaryMenu: {
     _type: 'menuGroup'
     menuId: string
@@ -1058,6 +1340,32 @@ export type HeaderQueryResult = {
       }> | null
     }>
   }
+  submenuGroups: Array<{
+    parentItemId: string
+    groups: Array<{
+      title?: string
+      links: Array<{
+        _key: string
+        _type: 'menuSubLink'
+        itemId: string
+        label: string
+        link: {
+          _type: 'cbLink'
+          linkType?: 'external' | 'internal'
+          externalUrl?: string
+          internalTargetType?: 'page' | 'path'
+          internalPage?: PageReference
+          internalPath?: string
+          openInNewTab?: boolean
+          internalPageSlug: string | null
+        }
+      }>
+      _type: 'headerSubmenuPanel'
+      _key: string
+    }>
+    _type: 'headerSubmenuConfig'
+    _key: string
+  }> | null
   languageToggleLabel?: string
   languageTogglePath?: string
   ctaLabel?: string
@@ -1075,14 +1383,21 @@ export type HeaderQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: footerQuery
-// Query: *[_type == "footer"][0]{    ...,    menu{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    },    legalMenu{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    },    menuGroups[]{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    }  }
+// Query: *[_type == "footer"][0]{    ...,    menu{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    },    legalMenu{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    },    menuGroups[]{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    },    navigationGroups[]{      ...,      links[]{          ...,  link{    ...,    "internalPageSlug": internalPage->slug.current  },  subLinks[]{    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }      }    }  }
 export type FooterQueryResult = {
   _id: string
   _type: 'footer'
   _createdAt: string
   _updatedAt: string
   _rev: string
-  heading?: string
+  heading?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt: string
+    _type: 'image'
+  }
   officeHeading?: string
   officeAddressOne?: string
   officeAddressTwo?: string
@@ -1163,6 +1478,44 @@ export type FooterQueryResult = {
       }> | null
     }>
   }> | null
+  navigationGroups: Array<{
+    _key: string
+    _type: 'menuGroup'
+    menuId: string
+    title?: string
+    links: Array<{
+      _key: string
+      _type: 'menuLink'
+      itemId: string
+      label: string
+      link: {
+        _type: 'cbLink'
+        linkType?: 'external' | 'internal'
+        externalUrl?: string
+        internalTargetType?: 'page' | 'path'
+        internalPage?: PageReference
+        internalPath?: string
+        openInNewTab?: boolean
+        internalPageSlug: string | null
+      }
+      subLinks: Array<{
+        _key: string
+        _type: 'menuSubLink'
+        itemId: string
+        label: string
+        link: {
+          _type: 'cbLink'
+          linkType?: 'external' | 'internal'
+          externalUrl?: string
+          internalTargetType?: 'page' | 'path'
+          internalPage?: PageReference
+          internalPath?: string
+          openInNewTab?: boolean
+          internalPageSlug: string | null
+        }
+      }> | null
+    }>
+  }> | null
   legalMenu: {
     _type: 'menuGroup'
     menuId: string
@@ -1206,7 +1559,7 @@ export type FooterQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: getPageQuery
-// Query: *[    _type == 'page' &&    slug.current == $slug &&    coalesce(language, "en") == $language  ][0]{    _id,    _type,    name,    language,    slug,    seo{      ...,      ogImage{        ...,        asset->      }    },    structuredData,    "pageBuilder": pageBuilder[]{      ...,        _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  },      _type == "cbGroup" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbColumn" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbCover" => {        ...,        content[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbColumns" => {        ...,        columns[]{          ...,          children[]{            ...,              _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }          }        }      }    }  }
+// Query: *[    _type == 'page' &&    slug.current == $slug &&    coalesce(language, "en") == $language  ][0]{    _id,    _type,    name,    language,    slug,    seo{      ...,      ogImage{        ...,        asset->      }    },    structuredData,    "pageBuilder": pageBuilder[]{      ...,        _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "aboutPageHero" => {    ...  },        _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "homePageHero" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  },      _type == "cbGroup" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "aboutPageHero" => {    ...  },            _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbColumn" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "aboutPageHero" => {    ...  },            _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbCover" => {        ...,        content[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "aboutPageHero" => {    ...  },            _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbColumns" => {        ...,        columns[]{          ...,          children[]{            ...,              _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "aboutPageHero" => {    ...  },              _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }          }        }      }    }  }
 export type GetPageQueryResult = {
   _id: string
   _type: 'page'
@@ -1232,14 +1585,14 @@ export type GetPageQueryResult = {
         title?: string
         description?: string
         altText?: string
-        sha1hash?: string
-        extension?: string
-        mimeType?: string
-        size?: number
-        assetId?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
         uploadId?: string
-        path?: string
-        url?: string
+        path: string
+        url: string
         metadata?: SanityImageMetadata
         source?: SanityAssetSourceData
       } | null
@@ -1252,6 +1605,93 @@ export type GetPageQueryResult = {
   } | null
   structuredData: string | null
   pageBuilder: Array<
+    | {
+        _key: string
+        _type: 'aboutPageHero'
+        backgroundColor?: string
+        personName: string
+        personRole: string
+        quote: string
+        media: CbMedia
+        posterImage?: {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          alt?: string
+          _type: 'image'
+        }
+        mediaCaption: string
+      }
+    | {
+        _key: string
+        _type: 'aboutPageOriginSection'
+        backgroundColor?: string
+        image: {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          alt?: string
+          _type: 'image'
+        }
+        imageBadgeLabel: string
+        heading: string
+        body: string
+        ctaLabel: string
+        ctaLink: {
+          _type: 'cbLink'
+          linkType?: 'external' | 'internal'
+          externalUrl?: string
+          internalTargetType?: 'page' | 'path'
+          internalPage?: PageReference
+          internalPath?: string
+          openInNewTab?: boolean
+          internalPageSlug: string | null
+        }
+      }
+    | {
+        _key: string
+        _type: 'aboutPageTimelineSection'
+        backgroundImage: {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          alt?: string
+          _type: 'image'
+        }
+        timelineItems: Array<{
+          year: string
+          description: string
+          _type: 'timelineItem'
+          _key: string
+        }>
+      }
+    | {
+        _key: string
+        _type: 'aboutPageWhoWeServeSection'
+        backgroundColor?: string
+        heading: string
+        body: string
+        ctaLabel: string
+        ctaLink: {
+          _type: 'cbLink'
+          linkType?: 'external' | 'internal'
+          externalUrl?: string
+          internalTargetType?: 'page' | 'path'
+          internalPage?: PageReference
+          internalPath?: string
+          openInNewTab?: boolean
+          internalPageSlug: string | null
+        }
+        audiencePanelBackground?: string
+        audienceItems: Array<{
+          label: string
+          _type: 'audienceItem'
+          _key: string
+        }>
+      }
     | {
         _key: string
         _type: 'cbButtons'
@@ -1765,7 +2205,7 @@ export type GetPageQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: homePageQuery
-// Query: *[    _type == "homePage" &&    coalesce(language, "en") == $language  ][0]{    _id,    _type,    name,    seo{      ...,      ogImage{        ...,        asset->      }    },    structuredData,    "pageBuilder": pageBuilder[]{      ...,        _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  },      _type == "cbGroup" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbColumn" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbCover" => {        ...,        content[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbColumns" => {        ...,        columns[]{          ...,          children[]{            ...,              _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }          }        }      }    }  }
+// Query: *[    _type == "homePage" &&    coalesce(language, "en") == $language  ][0]{    _id,    _type,    name,    seo{      ...,      ogImage{        ...,        asset->      }    },    structuredData,    "pageBuilder": pageBuilder[]{      ...,        _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "aboutPageHero" => {    ...  },        _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "homePageHero" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },        _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },        _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  },      _type == "cbGroup" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "aboutPageHero" => {    ...  },            _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbColumn" => {        ...,        children[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "aboutPageHero" => {    ...  },            _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbCover" => {        ...,        content[]{          ...,            _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "aboutPageHero" => {    ...  },            _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },            _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },            _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }        }      },      _type == "cbColumns" => {        ...,        columns[]{          ...,          children[]{            ...,              _type == "cbButton" => {    ...,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "cbButtons" => {    ...,    items[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "cbNavigation" => {    ...,    links[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "aboutPageHero" => {    ...  },              _type == "aboutPageOriginSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "aboutPageWhoWeServeSection" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "homePageBelowFold" => {    ...,    ctaLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "homePageSectorsSection" => {    ...,    rightImageLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "homePageCompaniesSection" => {    ...,    companies[]{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    }  },              _type == "homePageNewsSection" => {    ...,    featuredPost->{      ...,      link{        ...,        "internalPageSlug": internalPage->slug.current      }    },    cards[]{      ...,      post->{        ...,        link{          ...,          "internalPageSlug": internalPage->slug.current        }      }    },    backToTopLink{      ...,      "internalPageSlug": internalPage->slug.current    }  },              _type == "cbWysiwyg" => {    ...,    content[]{      ...,      markDefs[]{        ...,        _type == "link" => {          ...,          "page": page->slug.current        }      }    }  }          }        }      }    }  }
 export type HomePageQueryResult = {
   _id: string
   _type: 'homePage'
@@ -1789,14 +2229,14 @@ export type HomePageQueryResult = {
         title?: string
         description?: string
         altText?: string
-        sha1hash?: string
-        extension?: string
-        mimeType?: string
-        size?: number
-        assetId?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
         uploadId?: string
-        path?: string
-        url?: string
+        path: string
+        url: string
         metadata?: SanityImageMetadata
         source?: SanityAssetSourceData
       } | null
@@ -2317,6 +2757,201 @@ export type HomePageQueryResult = {
           } | null
         }> | null
       }
+    | {
+        _key: string
+        _type: 'homePageBelowFold'
+        introImage: {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          alt?: string
+          _type: 'image'
+        }
+        headline: string
+        description: string
+        ctaLabel: string
+        ctaLink: {
+          _type: 'cbLink'
+          linkType?: 'external' | 'internal'
+          externalUrl?: string
+          internalTargetType?: 'page' | 'path'
+          internalPage?: PageReference
+          internalPath?: string
+          openInNewTab?: boolean
+          internalPageSlug: string | null
+        }
+        stats: Array<{
+          value: string
+          label: string
+          subLabel?: string
+          variant: 'blue' | 'dark' | 'outline'
+          _type: 'homePageBelowFoldStat'
+          _key: string
+        }>
+      }
+    | {
+        _key: string
+        _type: 'homePageCompaniesSection'
+        backgroundColor: string
+        backgroundImage: {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          alt?: string
+          _type: 'image'
+        }
+        heading: string
+        companies: Array<{
+          title: string
+          label: string
+          link: {
+            _type: 'cbLink'
+            linkType?: 'external' | 'internal'
+            externalUrl?: string
+            internalTargetType?: 'page' | 'path'
+            internalPage?: PageReference
+            internalPath?: string
+            openInNewTab?: boolean
+            internalPageSlug: string | null
+          }
+          _type: 'homePageCompaniesItem'
+          _key: string
+        }>
+      }
+    | {
+        _key: string
+        _type: 'homePageHero'
+        backgroundMedia: CbMedia
+        headline: string
+        description: string
+        ctaLabel: string
+        ctaLink: {
+          _type: 'cbLink'
+          linkType?: 'external' | 'internal'
+          externalUrl?: string
+          internalTargetType?: 'page' | 'path'
+          internalPage?: PageReference
+          internalPath?: string
+          openInNewTab?: boolean
+          internalPageSlug: string | null
+        }
+        phrases: Array<string>
+      }
+    | {
+        _key: string
+        _type: 'homePageNewsSection'
+        backgroundColor: string
+        featuredPost: {
+          _id: string
+          _type: 'post'
+          _createdAt: string
+          _updatedAt: string
+          _rev: string
+          title: string
+          slug: Slug
+          language: string
+          publishedAt: string
+          cardImage: {
+            asset?: SanityImageAssetReference
+            media?: unknown
+            hotspot?: SanityImageHotspot
+            crop?: SanityImageCrop
+            alt?: string
+            _type: 'image'
+          }
+          excerpt: string
+          link: {
+            _type: 'cbLink'
+            linkType?: 'external' | 'internal'
+            externalUrl?: string
+            internalTargetType?: 'page' | 'path'
+            internalPage?: PageReference
+            internalPath?: string
+            openInNewTab?: boolean
+            internalPageSlug: string | null
+          }
+        } | null
+        featuredLinkLabel?: string
+        cards: Array<{
+          post: {
+            _id: string
+            _type: 'post'
+            _createdAt: string
+            _updatedAt: string
+            _rev: string
+            title: string
+            slug: Slug
+            language: string
+            publishedAt: string
+            cardImage: {
+              asset?: SanityImageAssetReference
+              media?: unknown
+              hotspot?: SanityImageHotspot
+              crop?: SanityImageCrop
+              alt?: string
+              _type: 'image'
+            }
+            excerpt: string
+            link: {
+              _type: 'cbLink'
+              linkType?: 'external' | 'internal'
+              externalUrl?: string
+              internalTargetType?: 'page' | 'path'
+              internalPage?: PageReference
+              internalPath?: string
+              openInNewTab?: boolean
+              internalPageSlug: string | null
+            }
+          } | null
+          linkLabel?: string
+          _type: 'homePageNewsCardItem'
+          _key: string
+        }> | null
+        backToTopLabel?: string
+        backToTopLink: {
+          _type: 'cbLink'
+          linkType?: 'external' | 'internal'
+          externalUrl?: string
+          internalTargetType?: 'page' | 'path'
+          internalPage?: PageReference
+          internalPath?: string
+          openInNewTab?: boolean
+          internalPageSlug: string | null
+        } | null
+      }
+    | {
+        _key: string
+        _type: 'homePageSectorsSection'
+        heading: string
+        leftImage: {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          alt?: string
+          _type: 'image'
+        }
+        rightImage: {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          alt?: string
+          _type: 'image'
+        }
+        rightImageLink: {
+          _type: 'cbLink'
+          linkType?: 'external' | 'internal'
+          externalUrl?: string
+          internalTargetType?: 'page' | 'path'
+          internalPage?: PageReference
+          internalPath?: string
+          openInNewTab?: boolean
+          internalPageSlug: string | null
+        }
+      }
   > | null
 } | null
 
@@ -2378,14 +3013,14 @@ export type LegalPageBySlugQueryResult = {
         title?: string
         description?: string
         altText?: string
-        sha1hash?: string
-        extension?: string
-        mimeType?: string
-        size?: number
-        assetId?: string
+        sha1hash: string
+        extension: string
+        mimeType: string
+        size: number
+        assetId: string
         uploadId?: string
-        path?: string
-        url?: string
+        path: string
+        url: string
         metadata?: SanityImageMetadata
         source?: SanityAssetSourceData
       } | null
@@ -2427,15 +3062,53 @@ export type LegalPageLanguagesBySlugQueryResult = Array<{
   language: string
 }>
 
+// Source: sanity/lib/queries.ts
+// Variable: postBySlugQuery
+// Query: *[    _type == "post" &&    slug.current == $slug &&    coalesce(language, "en") == $language  ][0]{    _id,    _type,    title,    slug,    language,    publishedAt,    cardImage,    excerpt,    link{      ...,      "internalPageSlug": internalPage->slug.current    }  }
+export type PostBySlugQueryResult = {
+  _id: string
+  _type: 'post'
+  title: string
+  slug: Slug
+  language: string
+  publishedAt: string
+  cardImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  excerpt: string
+  link: {
+    _type: 'cbLink'
+    linkType?: 'external' | 'internal'
+    externalUrl?: string
+    internalTargetType?: 'page' | 'path'
+    internalPage?: PageReference
+    internalPath?: string
+    openInNewTab?: boolean
+    internalPageSlug: string | null
+  }
+} | null
+
+// Source: sanity/lib/queries.ts
+// Variable: postSlugsQuery
+// Query: *[    _type == "post" &&    defined(slug.current) &&    coalesce(language, "en") == $language  ]{    "slug": slug.current  }
+export type PostSlugsQueryResult = Array<{
+  slug: string
+}>
+
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[_type == "settings"][0]{\n    ...,\n    ogImage{\n      ...,\n      asset->\n    }\n  }\n': SettingsQueryResult
-    '\n  *[_type == "header"][0]{\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    },\n    primaryMenu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    secondaryMenu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    }\n  }\n': HeaderQueryResult
-    '\n  *[_type == "footer"][0]{\n    ...,\n    menu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    legalMenu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    menuGroups[]{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    }\n  }\n': FooterQueryResult
-    '\n  *[\n    _type == \'page\' &&\n    slug.current == $slug &&\n    coalesce(language, "en") == $language\n  ][0]{\n    _id,\n    _type,\n    name,\n    language,\n    slug,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    },\n    structuredData,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n,\n      _type == "cbGroup" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumn" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbCover" => {\n        ...,\n        content[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumns" => {\n        ...,\n        columns[]{\n          ...,\n          children[]{\n            ...,\n            \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n          }\n        }\n      }\n    }\n  }\n': GetPageQueryResult
-    '\n  *[\n    _type == "homePage" &&\n    coalesce(language, "en") == $language\n  ][0]{\n    _id,\n    _type,\n    name,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    },\n    structuredData,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n,\n      _type == "cbGroup" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumn" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbCover" => {\n        ...,\n        content[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumns" => {\n        ...,\n        columns[]{\n          ...,\n          children[]{\n            ...,\n            \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n          }\n        }\n      }\n    }\n  }\n': HomePageQueryResult
+    '\n  *[_type == "header"][0]{\n    ...,\n    brandLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    },\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    },\n    primaryMenu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    secondaryMenu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    submenuGroups[]{\n      ...,\n      groups[]{\n        ...,\n        links[]{\n          ...,\n          link{\n            ...,\n            "internalPageSlug": internalPage->slug.current\n          }\n        }\n      }\n    }\n  }\n': HeaderQueryResult
+    '\n  *[_type == "footer"][0]{\n    ...,\n    menu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    legalMenu{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    menuGroups[]{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    },\n    navigationGroups[]{\n      ...,\n      links[]{\n        \n  ...,\n  link{\n    ...,\n    "internalPageSlug": internalPage->slug.current\n  },\n  subLinks[]{\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n\n      }\n    }\n  }\n': FooterQueryResult
+    '\n  *[\n    _type == \'page\' &&\n    slug.current == $slug &&\n    coalesce(language, "en") == $language\n  ][0]{\n    _id,\n    _type,\n    name,\n    language,\n    slug,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    },\n    structuredData,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n      \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "homePageHero" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n,\n      _type == "cbGroup" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n          \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumn" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n          \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbCover" => {\n        ...,\n        content[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n          \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumns" => {\n        ...,\n        columns[]{\n          ...,\n          children[]{\n            ...,\n            \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n            \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n          }\n        }\n      }\n    }\n  }\n': GetPageQueryResult
+    '\n  *[\n    _type == "homePage" &&\n    coalesce(language, "en") == $language\n  ][0]{\n    _id,\n    _type,\n    name,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    },\n    structuredData,\n    "pageBuilder": pageBuilder[]{\n      ...,\n      \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n      \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "homePageHero" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n      \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n      \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n,\n      _type == "cbGroup" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n          \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumn" => {\n        ...,\n        children[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n          \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbCover" => {\n        ...,\n        content[]{\n          ...,\n          \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n          \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n          \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n          \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n        }\n      },\n      _type == "cbColumns" => {\n        ...,\n        columns[]{\n          ...,\n          children[]{\n            ...,\n            \n  _type == "cbButton" => {\n    ...,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "cbButtons" => {\n    ...,\n    items[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "cbNavigation" => {\n    ...,\n    links[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "aboutPageHero" => {\n    ...\n  }\n,\n            \n  _type == "aboutPageOriginSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "aboutPageWhoWeServeSection" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "homePageBelowFold" => {\n    ...,\n    ctaLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "homePageSectorsSection" => {\n    ...,\n    rightImageLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "homePageCompaniesSection" => {\n    ...,\n    companies[]{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    }\n  }\n,\n            \n  _type == "homePageNewsSection" => {\n    ...,\n    featuredPost->{\n      ...,\n      link{\n        ...,\n        "internalPageSlug": internalPage->slug.current\n      }\n    },\n    cards[]{\n      ...,\n      post->{\n        ...,\n        link{\n          ...,\n          "internalPageSlug": internalPage->slug.current\n        }\n      }\n    },\n    backToTopLink{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n,\n            \n  _type == "cbWysiwyg" => {\n    ...,\n    content[]{\n      ...,\n      markDefs[]{\n        ...,\n        _type == "link" => {\n          ...,\n          "page": page->slug.current\n        }\n      }\n    }\n  }\n\n          }\n        }\n      }\n    }\n  }\n': HomePageQueryResult
     '\n  *[_type == "homePage"]{\n    "language": coalesce(language, "en")\n  }\n': HomePageLanguagesQueryResult
     '\n  *[\n    (_type == "homePage") ||\n    (_type == "page" && defined(slug.current)) ||\n    (_type == "legalPage" && defined(slug))\n  ] | order(_type asc) {\n    "slug": select(_type == "legalPage" => slug, slug.current),\n    "language": coalesce(language, "en"),\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
     '\n  *[\n    _type == "legalPage" &&\n    slug == $slug &&\n    coalesce(language, "en") == $language\n  ][0]{\n    _id,\n    title,\n    slug,\n    language,\n    content,\n    seo{\n      ...,\n      ogImage{\n        ...,\n        asset->\n      }\n    }\n  }\n': LegalPageBySlugQueryResult
@@ -2443,5 +3116,7 @@ declare module '@sanity/client' {
     '\n  *[\n    _type == "page" &&\n    defined(slug.current) &&\n    coalesce(language, "en") != $defaultLanguage\n  ]{\n    "slug": slug.current,\n    "language": coalesce(language, "en")\n  }\n': LocalizedPagesSlugsResult
     '\n  *[\n    _type == "page" &&\n    slug.current == $slug\n  ]{\n    "language": coalesce(language, "en")\n  }\n': PageLanguagesBySlugQueryResult
     '\n  *[\n    _type == "legalPage" &&\n    slug == $slug\n  ]{\n    "language": coalesce(language, "en")\n  }\n': LegalPageLanguagesBySlugQueryResult
+    '\n  *[\n    _type == "post" &&\n    slug.current == $slug &&\n    coalesce(language, "en") == $language\n  ][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    language,\n    publishedAt,\n    cardImage,\n    excerpt,\n    link{\n      ...,\n      "internalPageSlug": internalPage->slug.current\n    }\n  }\n': PostBySlugQueryResult
+    '\n  *[\n    _type == "post" &&\n    defined(slug.current) &&\n    coalesce(language, "en") == $language\n  ]{\n    "slug": slug.current\n  }\n': PostSlugsQueryResult
   }
 }

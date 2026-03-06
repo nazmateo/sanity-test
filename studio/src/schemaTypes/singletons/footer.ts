@@ -24,6 +24,23 @@ export const footer = defineType({
       ],
     }),
     defineField({
+      name: 'headingDark',
+      title: 'Heading Image (Dark Theme)',
+      type: 'image',
+      description: 'Optional logo variant used on dark footer backgrounds.',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+          validation: (rule) => rule.required().warning('Heading image alt text improves accessibility.'),
+        }),
+      ],
+    }),
+    defineField({
       name: 'officeHeading',
       title: 'Office heading',
       type: 'string',

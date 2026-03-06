@@ -9,8 +9,43 @@ export const header = defineType({
   fields: [
     defineField({
       name: 'brandImage',
-      title: 'Center Brand Image',
+      title: 'Center Brand Image (Fallback)',
       type: 'image',
+      description: 'Used when a theme-specific brand image is not set.',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+          validation: (rule) => rule.required().warning('Brand image alt text improves accessibility.'),
+        }),
+      ],
+    }),
+    defineField({
+      name: 'brandImageLight',
+      title: 'Center Brand Image (Light Theme)',
+      type: 'image',
+      description: 'Logo variant for home/light header theme.',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+          validation: (rule) => rule.required().warning('Brand image alt text improves accessibility.'),
+        }),
+      ],
+    }),
+    defineField({
+      name: 'brandImageDark',
+      title: 'Center Brand Image (Dark Theme)',
+      type: 'image',
+      description: 'Logo variant for about/default dark-text header theme.',
       options: {
         hotspot: true,
       },

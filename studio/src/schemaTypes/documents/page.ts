@@ -5,6 +5,7 @@ import {pageBuilderContainerBlockTypes} from '../objects/pageBuilderBlockTypes'
 const pageBuilderBlockTypes = [
   ...pageBuilderContainerBlockTypes,
   defineArrayMember({type: 'aboutPageHero'}),
+  defineArrayMember({type: 'aboutPageLeadershipSection'}),
   defineArrayMember({type: 'aboutPageOriginSection'}),
   defineArrayMember({type: 'aboutPageWhoWeServeSection'}),
   defineArrayMember({type: 'aboutPageTimelineSection'}),

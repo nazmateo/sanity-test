@@ -8,6 +8,7 @@ import {footer} from './singletons/footer'
 import {blockContent} from './objects/blockContent'
 import {blockContentTextOnly} from './objects/blockContentTextOnly'
 import {aboutPageHero} from './objects/aboutPageHero'
+import {aboutPageLeadershipSection} from './objects/aboutPageLeadershipSection'
 import {aboutPageOriginSection} from './objects/aboutPageOriginSection'
 import {aboutPageWhoWeServeSection} from './objects/aboutPageWhoWeServeSection'
 import {aboutPageTimelineSection} from './objects/aboutPageTimelineSection'
@@ -51,6 +52,7 @@ export const schemaTypes = [
   post,
   // Objects
   aboutPageHero,
+  aboutPageLeadershipSection,
   aboutPageOriginSection,
   aboutPageWhoWeServeSection,
   aboutPageTimelineSection,

@@ -166,6 +166,16 @@ const aboutPageWhoWeServeSectionWithLinkProjection = /* groq */ `
   }
 `
 
+const aboutPageLeadershipSectionWithLinkProjection = /* groq */ `
+  _type == "aboutPageLeadershipSection" => {
+    ...,
+    ctaLink{
+      ...,
+      "internalPageSlug": internalPage->slug.current
+    }
+  }
+`
+
 const homePageBelowFoldWithLinkProjection = /* groq */ `
   _type == "homePageBelowFold" => {
     ...,
@@ -267,6 +277,7 @@ export const getPageQuery = defineQuery(`
       ${cbButtonsWithLinksProjection},
       ${cbNavigationWithLinksProjection},
       ${aboutPageHeroWithLinkProjection},
+      ${aboutPageLeadershipSectionWithLinkProjection},
       ${aboutPageOriginSectionWithLinkProjection},
       ${aboutPageWhoWeServeSectionWithLinkProjection},
       ${homePageHeroWithLinkProjection},
@@ -283,6 +294,7 @@ export const getPageQuery = defineQuery(`
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
           ${aboutPageHeroWithLinkProjection},
+          ${aboutPageLeadershipSectionWithLinkProjection},
           ${aboutPageOriginSectionWithLinkProjection},
           ${aboutPageWhoWeServeSectionWithLinkProjection},
           ${homePageBelowFoldWithLinkProjection},
@@ -300,6 +312,7 @@ export const getPageQuery = defineQuery(`
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
           ${aboutPageHeroWithLinkProjection},
+          ${aboutPageLeadershipSectionWithLinkProjection},
           ${aboutPageOriginSectionWithLinkProjection},
           ${aboutPageWhoWeServeSectionWithLinkProjection},
           ${homePageBelowFoldWithLinkProjection},
@@ -317,6 +330,7 @@ export const getPageQuery = defineQuery(`
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
           ${aboutPageHeroWithLinkProjection},
+          ${aboutPageLeadershipSectionWithLinkProjection},
           ${aboutPageOriginSectionWithLinkProjection},
           ${aboutPageWhoWeServeSectionWithLinkProjection},
           ${homePageBelowFoldWithLinkProjection},
@@ -336,6 +350,7 @@ export const getPageQuery = defineQuery(`
             ${cbButtonsWithLinksProjection},
             ${cbNavigationWithLinksProjection},
             ${aboutPageHeroWithLinkProjection},
+            ${aboutPageLeadershipSectionWithLinkProjection},
             ${aboutPageOriginSectionWithLinkProjection},
             ${aboutPageWhoWeServeSectionWithLinkProjection},
             ${homePageBelowFoldWithLinkProjection},
@@ -372,6 +387,7 @@ export const homePageQuery = defineQuery(`
       ${cbButtonsWithLinksProjection},
       ${cbNavigationWithLinksProjection},
       ${aboutPageHeroWithLinkProjection},
+      ${aboutPageLeadershipSectionWithLinkProjection},
       ${aboutPageOriginSectionWithLinkProjection},
       ${aboutPageWhoWeServeSectionWithLinkProjection},
       ${homePageHeroWithLinkProjection},
@@ -388,6 +404,7 @@ export const homePageQuery = defineQuery(`
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
           ${aboutPageHeroWithLinkProjection},
+          ${aboutPageLeadershipSectionWithLinkProjection},
           ${aboutPageOriginSectionWithLinkProjection},
           ${aboutPageWhoWeServeSectionWithLinkProjection},
           ${homePageBelowFoldWithLinkProjection},
@@ -405,6 +422,7 @@ export const homePageQuery = defineQuery(`
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
           ${aboutPageHeroWithLinkProjection},
+          ${aboutPageLeadershipSectionWithLinkProjection},
           ${aboutPageOriginSectionWithLinkProjection},
           ${aboutPageWhoWeServeSectionWithLinkProjection},
           ${homePageBelowFoldWithLinkProjection},
@@ -422,6 +440,7 @@ export const homePageQuery = defineQuery(`
           ${cbButtonsWithLinksProjection},
           ${cbNavigationWithLinksProjection},
           ${aboutPageHeroWithLinkProjection},
+          ${aboutPageLeadershipSectionWithLinkProjection},
           ${aboutPageOriginSectionWithLinkProjection},
           ${aboutPageWhoWeServeSectionWithLinkProjection},
           ${homePageBelowFoldWithLinkProjection},
@@ -441,6 +460,7 @@ export const homePageQuery = defineQuery(`
             ${cbButtonsWithLinksProjection},
             ${cbNavigationWithLinksProjection},
             ${aboutPageHeroWithLinkProjection},
+            ${aboutPageLeadershipSectionWithLinkProjection},
             ${aboutPageOriginSectionWithLinkProjection},
             ${aboutPageWhoWeServeSectionWithLinkProjection},
             ${homePageBelowFoldWithLinkProjection},

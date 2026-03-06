@@ -2,6 +2,7 @@ import CTA from '@/app/components/Cta'
 import InfoSection from '@/app/components/InfoSection'
 import CustomPortableText from '@/app/components/PortableText'
 import AboutHeroSection from '@/app/components/about/AboutHeroSection'
+import AboutLeadershipSection from '@/app/components/about/AboutLeadershipSection'
 import AboutOriginSection from '@/app/components/about/AboutOriginSection'
 import AboutTimelineSection from '@/app/components/about/AboutTimelineSection'
 import AboutWhoWeServeSection from '@/app/components/about/AboutWhoWeServeSection'
@@ -35,6 +36,7 @@ import {
   type CbLink,
   type CbMedia,
   type AboutPageHero,
+  type AboutPageLeadershipSection,
   type AboutPageOriginSection,
   type AboutPageTimelineSection,
   type AboutPageWhoWeServeSection,
@@ -564,6 +566,18 @@ export default function BlockRenderer({
           unstyled
         >
           <AboutHeroSection section={block as AboutPageHero} />
+        </BlockSlot>
+      )
+    case 'aboutPageLeadershipSection':
+      return (
+        <BlockSlot
+          refId={key}
+          data-page-id={pageId}
+          data-page-type={pageType}
+          data-sanity={blockDataAttr}
+          unstyled
+        >
+          <AboutLeadershipSection section={block as AboutPageLeadershipSection} />
         </BlockSlot>
       )
     case 'aboutPageOriginSection':

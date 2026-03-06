@@ -50,6 +50,8 @@ type HeaderSubmenuConfig = {
   groups?: HeaderSubmenuPanel[] | null
 }
 
+type HeaderThemeKey = 'light' | 'dark'
+
 export type LayoutSettings = {
   title?: string | null
   logo?: {
@@ -59,6 +61,14 @@ export type LayoutSettings = {
   header?: {
     _type?: string
     brandImage?: {
+      asset?: {_ref?: string} | null
+      alt?: string | null
+    } | null
+    brandImageLight?: {
+      asset?: {_ref?: string} | null
+      alt?: string | null
+    } | null
+    brandImageDark?: {
       asset?: {_ref?: string} | null
       alt?: string | null
     } | null
@@ -77,6 +87,10 @@ export type LayoutSettings = {
       asset?: {_ref?: string} | null
       alt?: string | null
     } | null
+    headingDark?: {
+      asset?: {_ref?: string} | null
+      alt?: string | null
+    } | null
     officeHeading?: string | null
     officeAddressOne?: string | null
     officeAddressTwo?: string | null
@@ -92,6 +106,14 @@ export type LayoutSettings = {
   primaryMenu?: MenuGroup | null
   secondaryMenu?: MenuGroup | null
   menuGroups?: MenuGroup[] | null
+}
+
+function selectHeaderTheme(pathname: string): HeaderThemeKey {
+  const normalizedPath = pathname === '/' ? '/' : pathname.replace(/\/+$/, '')
+  const isHomeRoute =
+    normalizedPath === '/' ||
+    SUPPORTED_LANGUAGES.some((language) => normalizedPath === `/${language}`)
+  return isHomeRoute ? 'light' : 'dark'
 }
 
 function splitSubLinksForPanels(items: MenuSubLink[]) {
@@ -152,11 +174,11 @@ function normalizePanelGroups(
 function MenuItem({
   item,
   configuredSubmenu,
-  isInverse,
+  theme,
 }: {
   item: MenuLink
   configuredSubmenu?: HeaderSubmenuConfig | null
-  isInverse: boolean
+  theme: HeaderThemeKey
 }) {
   const href = resolveContentLinkHref(item.link)
   if (!href) {
@@ -179,15 +201,15 @@ function MenuItem({
 
   if (!hasSubLinks) {
     return (
-        <Link
-          href={href}
-          data-menu-item-id={item.itemId || undefined}
-          className={`inline-flex items-center gap-[6px] p-[10px] text-[20px] leading-none transition-colors hover:text-[var(--color-albatha-blue)] ${
-            isInverse ? 'text-white' : 'text-[var(--color-albatha-midnight)]'
-          }`}
-          target={isExternal ? '_blank' : undefined}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
-        >
+      <Link
+        href={href}
+        data-menu-item-id={item.itemId || undefined}
+        className={`inline-flex items-center gap-[6px] p-[10px] text-[20px] leading-none transition-colors hover:text-[var(--color-albatha-blue)] ${
+          theme === 'light' ? 'text-white' : 'text-[var(--color-albatha-midnight)]'
+        }`}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
+      >
         <span>{item.label || 'Link'}</span>
       </Link>
     )
@@ -199,7 +221,7 @@ function MenuItem({
         href={href}
         data-menu-item-id={item.itemId || undefined}
         className={`inline-flex items-center gap-[6px] rounded-[8px] p-[10px] text-[20px] leading-none transition-colors hover:text-[var(--color-albatha-blue)] ${
-          isInverse
+          theme === 'light'
             ? 'text-white group-hover:bg-white/10'
             : 'text-[var(--color-albatha-midnight)] group-hover:bg-black/5'
         }`}
@@ -288,13 +310,13 @@ function CenterBrand({
   imageRef,
   imageAlt,
   href,
-  isInverse,
+  theme,
 }: {
   title?: string | null
   imageRef?: string
   imageAlt?: string | null
   href: string
-  isInverse: boolean
+  theme: HeaderThemeKey
 }) {
   if (imageRef) {
     return (
@@ -314,10 +336,14 @@ function CenterBrand({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-3 ${isInverse ? 'text-white' : 'text-[var(--color-albatha-midnight)]'}`}
+      className={`inline-flex items-center gap-3 ${
+        theme === 'light' ? 'text-white' : 'text-[var(--color-albatha-midnight)]'
+      }`}
     >
       <span
-        className={`inline-flex size-10 rounded-full border-2 ${isInverse ? 'border-white/90' : 'border-[var(--color-albatha-midnight)]'}`}
+        className={`inline-flex size-10 rounded-full border-2 ${
+          theme === 'light' ? 'border-white/90' : 'border-[var(--color-albatha-midnight)]'
+        }`}
         aria-hidden
       />
       <span className="font-suse text-[52px] leading-none tracking-tight">
@@ -329,10 +355,7 @@ function CenterBrand({
 
 export default function Header({settings}: {settings?: LayoutSettings | null}) {
   const pathname = usePathname() || '/'
-  const normalizedPath = pathname === '/' ? '/' : pathname.replace(/\/+$/, '')
-  const isHomeRoute =
-    normalizedPath === '/' ||
-    SUPPORTED_LANGUAGES.some((language) => normalizedPath === `/${language}`)
+  const theme = selectHeaderTheme(pathname)
 
   const headerConfig = settings?.header
   const primaryMenu = headerConfig?.primaryMenu || settings?.primaryMenu
@@ -342,15 +365,18 @@ export default function Header({settings}: {settings?: LayoutSettings | null}) {
   const languageTogglePath = headerConfig?.languageTogglePath || '/ae'
   const languageToggleLabel = headerConfig?.languageToggleLabel || 'AR'
   const brandHref = resolveContentLinkHref(headerConfig?.brandLink || null) || '/'
-  const brandImageRef = headerConfig?.brandImage?.asset?._ref
-  const brandImageAlt = headerConfig?.brandImage?.alt
+  const selectedBrandImage =
+    theme === 'light'
+      ? headerConfig?.brandImageLight || headerConfig?.brandImage
+      : headerConfig?.brandImageDark || headerConfig?.brandImage
+  const brandImageRef = selectedBrandImage?.asset?._ref
+  const brandImageAlt = selectedBrandImage?.alt
   const submenuConfigs = headerConfig?.submenuGroups || []
-  const isInverse = isHomeRoute
 
   return (
     <header
       className={`absolute inset-x-0 top-0 z-50 ${
-        isInverse ? 'text-white' : 'text-[var(--color-albatha-midnight)]'
+        theme === 'light' ? 'text-white' : 'text-[var(--color-albatha-midnight)]'
       }`}
     >
       <div className="mx-auto mt-10 w-[min(1600px,calc(100%-2rem))]  px-2">
@@ -371,7 +397,7 @@ export default function Header({settings}: {settings?: LayoutSettings | null}) {
                     configuredSubmenu={submenuConfigs.find(
                       (config) => config.parentItemId === item.itemId,
                     )}
-                    isInverse={isInverse}
+                    theme={theme}
                   />
                 </li>
               ))}
@@ -383,7 +409,7 @@ export default function Header({settings}: {settings?: LayoutSettings | null}) {
             imageRef={brandImageRef}
             imageAlt={brandImageAlt}
             href={brandHref}
-            isInverse={isInverse}
+            theme={theme}
           />
 
           <div className="flex items-center justify-self-end gap-6">
@@ -402,7 +428,7 @@ export default function Header({settings}: {settings?: LayoutSettings | null}) {
                       configuredSubmenu={submenuConfigs.find(
                         (config) => config.parentItemId === item.itemId,
                       )}
-                      isInverse={isInverse}
+                      theme={theme}
                     />
                   </li>
                 ))}
@@ -411,7 +437,7 @@ export default function Header({settings}: {settings?: LayoutSettings | null}) {
             <Link
               href={languageTogglePath}
               className={`inline-flex h-[30px] items-center gap-[8px] rounded-[8px] border px-[12px] text-[16px] uppercase leading-none transition-colors ${
-                isInverse
+                theme === 'light'
                   ? 'border-white text-white hover:bg-white/15'
                   : 'border-[var(--color-albatha-midnight)] text-[var(--color-albatha-midnight)] hover:bg-black/5'
               }`}
@@ -426,7 +452,7 @@ export default function Header({settings}: {settings?: LayoutSettings | null}) {
         </div>
         <div
           className={`h-px w-full ${
-            isInverse ? 'bg-white/60' : 'bg-[var(--color-albatha-black-20)]'
+            theme === 'light' ? 'bg-white/60' : 'bg-[var(--color-albatha-black-20)]'
           }`}
         />
       </div>
