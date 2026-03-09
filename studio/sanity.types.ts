@@ -486,6 +486,22 @@ export type AboutPageOriginSection = {
   ctaLink: CbLink
 }
 
+export type AboutPageLeadershipSection = {
+  _type: 'aboutPageLeadershipSection'
+  backgroundColor?: string
+  heading: string
+  body: string
+  ctaLabel: string
+  ctaLink: CbLink
+  leaders: Array<{
+    name: string
+    role: string
+    bio: string
+    _type: 'leaderProfile'
+    _key: string
+  }>
+}
+
 export type AboutPageHero = {
   _type: 'aboutPageHero'
   backgroundColor?: string
@@ -511,6 +527,14 @@ export type Footer = {
   _updatedAt: string
   _rev: string
   heading?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt: string
+    _type: 'image'
+  }
+  headingDark?: {
     asset?: SanityImageAssetReference
     media?: unknown
     hotspot?: SanityImageHotspot
@@ -562,6 +586,22 @@ export type Header = {
   _updatedAt: string
   _rev: string
   brandImage?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt: string
+    _type: 'image'
+  }
+  brandImageLight?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt: string
+    _type: 'image'
+  }
+  brandImageDark?: {
     asset?: SanityImageAssetReference
     media?: unknown
     hotspot?: SanityImageHotspot
@@ -966,6 +1006,9 @@ export type Page = {
       } & AboutPageHero)
     | ({
         _key: string
+      } & AboutPageLeadershipSection)
+    | ({
+        _key: string
       } & AboutPageOriginSection)
     | ({
         _key: string
@@ -1125,6 +1168,7 @@ export type AllSanitySchemaTypes =
   | AboutPageTimelineSection
   | AboutPageWhoWeServeSection
   | AboutPageOriginSection
+  | AboutPageLeadershipSection
   | AboutPageHero
   | Footer
   | SanityImageCrop

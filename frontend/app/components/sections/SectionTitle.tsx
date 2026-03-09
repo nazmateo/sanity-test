@@ -1,3 +1,5 @@
+import {cn} from '@/app/components/lib/cn'
+
 type SectionTitleProps = {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p'
   children?: string | null
@@ -7,6 +9,5 @@ type SectionTitleProps = {
 export default function SectionTitle({as = 'h2', children, className}: SectionTitleProps) {
   if (!children) return null
   const Tag = as
-  return <Tag className={className}>{children}</Tag>
+  return <Tag className={cn('section-title', className)}>{children}</Tag>
 }
-

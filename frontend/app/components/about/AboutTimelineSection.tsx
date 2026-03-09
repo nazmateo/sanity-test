@@ -11,7 +11,7 @@ export default function AboutTimelineSection({section}: {section?: AboutPageTime
   const items = (section.timelineItems || []).slice(0, 10)
 
   return (
-    <section className="relative min-h-[520px] overflow-hidden px-4 pb-14 pt-20 md:min-h-[620px] md:px-8 md:pb-16 md:pt-24 lg:min-h-[780px] lg:pb-20 lg:pt-[100px]">
+    <section className="timeline-shell">
       {backgroundImageRef ? (
         <div className="absolute inset-0">
           <SanityImage
@@ -24,7 +24,7 @@ export default function AboutTimelineSection({section}: {section?: AboutPageTime
           />
         </div>
       ) : null}
-      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(21,29,40,0)] via-[rgba(21,29,40,0.35)] to-[var(--color-albatha-midnight)]" />
+      <div className="surface-gradient-timeline absolute inset-0" />
 
       <SectionContainer className="relative z-10 flex flex-col gap-8 lg:gap-14">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5 lg:gap-x-4 lg:gap-y-10">

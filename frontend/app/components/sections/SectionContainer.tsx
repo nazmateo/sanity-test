@@ -1,11 +1,12 @@
 import {type ReactNode} from 'react'
 
+import {cn} from '@/app/components/lib/cn'
+
 type SectionContainerProps = {
   children: ReactNode
   className?: string
 }
 
 export default function SectionContainer({children, className}: SectionContainerProps) {
-  return <div className={`mx-auto w-full max-w-[1600px] ${className || ''}`.trim()}>{children}</div>
+  return <div className={cn('section-shell', className)}>{children}</div>
 }
-

@@ -148,7 +148,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
       <html
         lang={lang}
         dir="ltr"
-        className={`${inter.variable} ${ibmPlexMono.variable} ${notoSansArabic.variable} ${suse.variable} bg-white text-black`}
+        className={`${inter.variable} ${ibmPlexMono.variable} ${notoSansArabic.variable} ${suse.variable}`}
       >
       <body>
         <LocaleDocumentController />

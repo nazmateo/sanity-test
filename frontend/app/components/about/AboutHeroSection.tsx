@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 import SanityImage from '@/app/components/SanityImage'
 import SectionContainer from '@/app/components/sections/SectionContainer'
+import {resolveSurfaceClass} from '@/app/components/sections/theme'
 import {fileAssetRefToUrl} from '@/app/components/lib/sanityAsset'
 import {type AboutPageHero} from '@/sanity/lib/types'
 
@@ -15,7 +16,7 @@ function PlayIcon() {
       alt="Play"
       width={106}
       height={117}
-      className="h-[82px] w-[74px] md:h-[98px] md:w-[90px] lg:h-[117px] lg:w-[106px]"
+        className="about-hero-play-icon"
       priority={false}
     />
   )
@@ -47,33 +48,31 @@ export default function AboutHeroSection({section}: {section?: AboutPageHero | n
     section.posterImage?.alt || section.media?.image?.alt || section.quote || 'About hero media'
   const hasVideo = Boolean(videoUrl)
   const showVideo = hasVideo && isPlaying
+  const surfaceClass = resolveSurfaceClass(section.backgroundColor, 'light')
 
   return (
-    <section
-      className="px-4 pb-16 pt-[180px] md:px-8 md:pb-20 md:pt-[220px] lg:px-[160px] lg:pb-[120px] lg:pt-[240px]"
-      style={{background: section.backgroundColor || 'var(--color-albatha-white)'}}
-    >
-      <SectionContainer className="flex flex-col gap-10 lg:gap-[70px]">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[289px_1fr] lg:gap-[134px]">
+    <section className={`about-hero-shell px-4 pb-16 md:px-8 ${surfaceClass}`}>
+      <SectionContainer className="about-hero-layout">
+        <div className="about-hero-grid">
           <div className="font-suse">
-            <p className="text-[30px] leading-[1.3] text-[var(--color-albatha-midnight)]">
+            <p className="about-hero-name">
               {section.personName}
             </p>
-            <p className="mt-4 text-[26px] leading-[1.3] text-[var(--color-albatha-blue)]">
+            <p className="about-hero-role">
               {section.personRole}
             </p>
           </div>
-          <p className="font-suse text-[40px] leading-[1.1] text-[var(--color-albatha-midnight)] lg:text-[72px]">
+          <p className="about-hero-quote">
             {'" '}
             {section.quote}
             {' "'}
           </p>
         </div>
 
-        <div className="relative overflow-hidden rounded-[24px] lg:rounded-[36px]">
+        <div className="about-hero-media">
           {showVideo ? (
             <video
-              className="h-[340px] w-full object-cover md:h-[500px] lg:h-[775px]"
+              className="about-hero-media-asset"
               src={videoUrl || undefined}
               autoPlay
               controls
@@ -86,7 +85,7 @@ export default function AboutHeroSection({section}: {section?: AboutPageHero | n
               width={1596}
               height={775}
               mode="cover"
-              className="h-[340px] w-full object-cover md:h-[500px] lg:h-[775px]"
+              className="about-hero-media-asset"
             />
           ) : null}
 
@@ -100,7 +99,7 @@ export default function AboutHeroSection({section}: {section?: AboutPageHero | n
             </span>
           </div>
 
-          <p className="absolute inset-x-0 bottom-8 text-center font-suse text-[26px] leading-[1.3] text-[var(--color-albatha-midnight)] lg:text-[40px]">
+          <p className="about-hero-caption">
             {section.mediaCaption}
           </p>
         </div>

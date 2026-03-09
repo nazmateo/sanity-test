@@ -35,14 +35,13 @@ export default function SideBySideIcons() {
         >
           <mask
             id="mask0_408_139"
-            style={{maskType: 'alpha'}}
             maskUnits="userSpaceOnUse"
             x="0"
             y="0"
             width="180"
             height="180"
           >
-            <circle cx="90" cy="90" r="90" fill="black" />
+            <circle cx="90" cy="90" r="90" fill="white" />
           </mask>
           <g mask="url(#mask0_408_139)">
             <circle cx="90" cy="90" r="90" fill="black" strokeWidth="6" />

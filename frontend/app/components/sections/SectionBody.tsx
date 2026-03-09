@@ -1,3 +1,5 @@
+import {cn} from '@/app/components/lib/cn'
+
 type SectionBodyProps = {
   text?: string | null
   splitByParagraphs?: boolean
@@ -14,18 +16,17 @@ export default function SectionBody({
   if (!text) return null
 
   if (!splitByParagraphs) {
-    return <p className={className}>{text}</p>
+    return <p className={cn('section-body', className)}>{text}</p>
   }
 
   const paragraphs = text.split(/\n\s*\n/g).filter(Boolean)
   return (
-    <div className={className}>
+    <div className={cn('section-body', className)}>
       {paragraphs.map((paragraph, index) => (
-        <p key={`${paragraph.slice(0, 24)}-${index}`} className={paragraphClassName}>
+        <p key={`${paragraph.slice(0, 24)}-${index}`} className={cn('section-body', paragraphClassName)}>
           {paragraph}
         </p>
       ))}
     </div>
   )
 }
-

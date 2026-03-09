@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import SanityImage from '@/app/components/SanityImage'
 import SectionContainer from '@/app/components/sections/SectionContainer'
+import {resolveSurfaceClass} from '@/app/components/sections/theme'
 import {type HomePageCompaniesSection} from '@/sanity/lib/types'
 import {isExternalContentLink, resolveContentLinkHref} from '@/sanity/lib/utils'
 
@@ -23,18 +24,18 @@ function CompanyItem({
 
   return (
     <article className="border-b border-white/70 pb-3">
-      <p className="font-suse text-[28px] leading-[1.3] text-white">{titleText}</p>
+      <p className="type-company-title text-on-dark">{titleText}</p>
       {href ? (
         <Link
           href={href}
-          className="mt-1 inline-block font-suse text-[18px] leading-[1.3] text-[var(--color-albatha-blue)]"
+          className="type-company-link mt-1 inline-block text-accent"
           target={external && openInNewTab ? '_blank' : undefined}
           rel={external && openInNewTab ? 'noopener noreferrer' : undefined}
         >
           {labelText}
         </Link>
       ) : (
-        <p className="mt-1 font-suse text-[18px] leading-[1.3] text-[var(--color-albatha-blue)]">
+        <p className="type-company-link mt-1 text-accent">
           {labelText}
         </p>
       )}
@@ -48,12 +49,10 @@ export default function CompaniesSection({section}: {section?: HomePageCompanies
   const backgroundImageRef = section.backgroundImage?.asset?._ref
   const backgroundImageAlt = section.backgroundImage?.alt || 'Companies background'
   const companies = (section.companies || []).slice(0, 6)
+  const surfaceClass = resolveSurfaceClass(section.backgroundColor, 'midnight')
 
   return (
-    <section
-      className="relative flex flex-col justify-end overflow-hidden px-4 pb-10 pt-16 md:min-h-[820px] md:px-8 md:pt-20 lg:min-h-[1085px] lg:px-0 lg:pb-10 lg:pt-[100px]"
-      style={{backgroundColor: section.backgroundColor || 'var(--color-albatha-midnight)'}}
-    >
+    <section className={`companies-shell ${surfaceClass}`}>
       {backgroundImageRef ? (
         <div className="absolute inset-0">
           <SanityImage
@@ -62,14 +61,14 @@ export default function CompaniesSection({section}: {section?: HomePageCompanies
             width={1920}
             height={1085}
             mode="cover"
-            className="h-full w-full scale-[1.16] object-cover object-center"
+            className="companies-overlay-image h-full w-full object-cover object-center"
           />
         </div>
       ) : null}
-      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(21,29,40,0.2)] to-[var(--color-albatha-midnight)]" />
+      <div className="surface-gradient-companies absolute inset-0" />
 
-      <SectionContainer className="relative z-10 mt-auto flex flex-col items-center gap-10 lg:gap-[60px]">
-        <p className="max-w-[1200px] text-center font-suse text-[24px] leading-[1.3] text-white md:text-[30px] lg:text-[35px]">
+      <SectionContainer className="companies-content">
+        <p className="companies-heading">
           {section.heading}
         </p>
 

@@ -3,12 +3,13 @@ import {format, parseISO} from 'date-fns'
 
 import SanityImage from '@/app/components/SanityImage'
 import SectionContainer from '@/app/components/sections/SectionContainer'
+import {resolveSurfaceClass} from '@/app/components/sections/theme'
 import {type HomePageNewsSection} from '@/sanity/lib/types'
 import {isExternalContentLink, resolveContentLinkHref} from '@/sanity/lib/utils'
 
 function NewsArrow() {
   return (
-    <span className="inline-flex h-[44px] w-[44px] items-center justify-center rounded-[10px] bg-[var(--color-albatha-orange)] text-[24px] text-white lg:h-[76px] lg:w-[85px] lg:text-[34px]">
+    <span className="news-arrow">
       {'->'}
     </span>
   )
@@ -28,16 +29,16 @@ function SecondaryCard({
   href?: string | null
   external?: boolean
   openInNewTab?: boolean | null
-}) {
+  }) {
   const content = (
-    <article className="relative h-full rounded-[14px] bg-[var(--color-albatha-white)] p-5 pr-16 lg:h-[311px] lg:rounded-[14px] lg:px-[20px] lg:pb-[20px] lg:pt-[18px]">
-      <p className="font-suse text-[20px] leading-[1.3] text-[rgba(21,29,40,0.5)] lg:text-[30px]">
+    <article className="news-card">
+      <p className="type-news-date">
         {formatNewsDate(publishedAt)}
       </p>
-      <p className="mt-4 font-suse text-[28px] leading-[1.3] text-[var(--color-albatha-midnight)] lg:text-[42px]">
+      <p className="type-news-title mt-4">
         {title}
       </p>
-      <p className="mt-6 font-suse text-[16px] uppercase text-[var(--color-albatha-blue)] lg:text-[20px]">
+      <p className="type-news-link mt-6">
         {linkLabel || 'READ MORE'}
       </p>
       <span className="absolute bottom-0 right-0">
@@ -71,16 +72,14 @@ export default function NewsSection({section}: {section?: HomePageNewsSection | 
   const cards = (section.cards || []).slice(0, 3)
   const backToTopHref = resolveContentLinkHref(section.backToTopLink || null) || '#top'
   const backToTopExternal = isExternalContentLink(section.backToTopLink || null)
+  const surfaceClass = resolveSurfaceClass(section.backgroundColor, 'midnight')
 
   return (
-    <section
-      className="relative bg-[var(--color-albatha-midnight)] px-4 pb-20 pt-10 md:px-8 lg:px-[160px] lg:pb-[120px]"
-      style={{backgroundColor: section.backgroundColor || 'var(--color-albatha-midnight)'}}
-    >
+    <section className={`news-shell ${surfaceClass}`}>
       <SectionContainer className="flex flex-col gap-6">
-        <article className="relative overflow-hidden rounded-[14px] bg-[var(--color-albatha-white)] p-5 lg:h-[570px] lg:px-[20px] lg:py-[18px]">
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[608px_1fr] lg:items-center lg:gap-[42px]">
-            <div className="overflow-hidden rounded-[20px]">
+        <article className="news-feature-card">
+          <div className="news-feature-grid">
+            <div className="news-feature-media">
               {featuredImageRef ? (
                 <SanityImage
                   id={featuredImageRef}
@@ -88,18 +87,18 @@ export default function NewsSection({section}: {section?: HomePageNewsSection | 
                   width={608}
                   height={533}
                   mode="cover"
-                  className="h-[280px] w-full object-cover lg:h-[533px]"
+                  className="news-feature-image"
                 />
               ) : null}
             </div>
-            <div className="flex flex-col gap-6 lg:gap-[32px]">
-              <p className="font-suse text-[20px] leading-[1.3] text-[rgba(21,29,40,0.5)] lg:text-[26px]">
+            <div className="news-feature-copy">
+              <p className="type-news-date">
                 {formatNewsDate(featured?.publishedAt)}
               </p>
-              <p className="font-suse text-[30px] leading-[1.3] text-[var(--color-albatha-midnight)] lg:text-[49px]">
+              <p className="type-news-title">
                 {featured?.title}
               </p>
-              <p className="font-suse text-[22px] leading-[1.3] text-[var(--color-albatha-midnight)] lg:text-[32px]">
+              <p className="type-news-excerpt">
                 {featured?.excerpt}
               </p>
               <Link
@@ -108,7 +107,7 @@ export default function NewsSection({section}: {section?: HomePageNewsSection | 
                 rel={
                   featuredExternal && featured?.link?.openInNewTab ? 'noopener noreferrer' : undefined
                 }
-                className="font-suse text-[16px] uppercase text-[var(--color-albatha-blue)] lg:text-[20px]"
+                className="type-news-link"
               >
                 {section.featuredLinkLabel || 'READ MORE'}
               </Link>
@@ -126,7 +125,7 @@ export default function NewsSection({section}: {section?: HomePageNewsSection | 
           </Link>
         </article>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-[26px]">
+        <div className="news-grid">
           {cards.map((item, index) => {
             const post = item.post
             const href = resolveContentLinkHref(post?.link || null)
@@ -146,7 +145,7 @@ export default function NewsSection({section}: {section?: HomePageNewsSection | 
         </div>
       </SectionContainer>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-4 px-4 md:px-8 lg:px-[160px]">
+      <div className="pointer-events-none absolute inset-x-0 bottom-4 px-4 md:px-8">
         <SectionContainer className="flex justify-end">
           <Link
             href={backToTopHref}
@@ -154,7 +153,7 @@ export default function NewsSection({section}: {section?: HomePageNewsSection | 
             rel={
               backToTopExternal && section.backToTopLink?.openInNewTab ? 'noopener noreferrer' : undefined
             }
-            className="pointer-events-auto inline-flex items-center gap-2 rounded-[8px] bg-white/20 px-[10px] py-[10px] font-suse text-[14px] leading-none text-white"
+            className="news-backtotop"
           >
             <span>{section.backToTopLabel || 'Back to Top'}</span>
             <span aria-hidden>^^</span>
